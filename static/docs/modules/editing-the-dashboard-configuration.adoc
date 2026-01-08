@@ -1,0 +1,54 @@
+:_module-type: PROCEDURE
+
+[id="editing-the-dashboard-configuration_{context}"]
+= Editing the dashboard configuration
+
+[role='_abstract']
+As an {productname-short} administrator, you can customize the interface of the dashboard by editing the dashboard configuration.
+
+.Prerequisites
+* You have {productname-short} administrator privileges. 
+
+.Procedure
+. Log in to the {openshift-platform} console as a user with {productname-short} administrator privileges.
+. In the *Administrator* perspective, click *Home* -> *API Explorer*.
+. In the search bar, enter `OdhDashboardConfig` to filter by kind.
+. Click the `OdhDashboardConfig` custom resource (CR) to open the resource details page.
+. From the *Project* list, select the {productname-short} application namespace; the default is `pass:attributes[{dbd-config-default-namespace}]`.
+. Click the *Instances* tab.
+. Click the `odh-dashboard-config` instance to open the details page.
+. Click the *YAML* tab. 
+. Edit the values of the options that you want to change.
++
+For example, to show or hide a menu item in the dashboard navigation menu, update the `spec.dashboardConfig` section to edit the relevant dashboard configuration option. 
++
+[NOTE]
+====
+If a dashboard configuration option is not included in the `OdhDashboardConfig` CR, the default value is used.
+
+To change the default behavior for such options, edit the `OdhDashboardConfig` CR to add the missing entry to the `spec.dashboardConfig` section, and set the preferred value:
+
+* To show the feature, set the value to `false`
+* To hide the feature, set the value to `true`
+
+.Example
+By default, the *Distributed workloads* menu item is shown in the dashboard navigation menu. 
+To hide this menu item, set the `disableDistributedWorkloads` value to `true`, as follows:
+
+[source]
+----
+disableDistributedWorkloads: true
+----
+====
++
+ifndef::upstream[]
+For more information about dashboard configuration options and their default values, see link:{rhoaidocshome}{default-format-url}/managing_resources/customizing-the-dashboard#ref-dashboard-configuration-options_dashboard[Dashboard configuration options].
+endif::[]
+ifdef::upstream[]
+For more information about dashboard configuration options and their default values, see link:{odhdocshome}/managing-resources/#ref-dashboard-configuration-options_dashboard[Dashboard configuration options].
+endif::[]
+. Click *Save* to apply your changes and then click *Reload* to synchronize your changes to the cluster.
+
+.Verification
+
+* Log in to {productname-short} and verify that your dashboard configurations apply.

@@ -1,0 +1,58 @@
+:_module-type: CONCEPT
+
+[id="about-base-training-images_{context}"]
+= About base training images
+
+[role="_abstract"]
+The base training images for distributed workloads are optimized with the tools and libraries that you need to run distributed training jobs. 
+You can use the provided base images, or you can create custom images that are specific to your needs.
+
+ifndef::upstream[]
+For information about {org-name} support of training images and packages, see link:https://access.redhat.com/articles/rhoai-supported-configs[{productname-long}: Supported Configurations].
+endif::[]
+
+The following table lists the training images that are installed with {productname-long} by default.
+These images are AMD64 images, which might not work on other architectures.
+
+.Default training base images
+[cols="1,6"]
+|===
+| Image type | Description
+
+| Ray CUDA
+| If you are working with compute-intensive models and you want to accelerate the training job with NVIDIA GPU support, you can use the Ray Compute Unified Device Architecture (CUDA) base image to gain access to the NVIDIA CUDA Toolkit. 
+Using this toolkit, you can accelerate your work by using libraries and tools that are optimized for NVIDIA GPUs.
+
+| Ray ROCm 
+| If you are working with compute-intensive models and you want to accelerate the training job with AMD GPU support, you can use the Ray ROCm base image to gain access to the AMD ROCm software stack. 
+Using this software stack, you can accelerate your work by using libraries and tools that are optimized for AMD GPUs. 
+
+| KFTO CUDA 
+| If you are working with compute-intensive models and you want to accelerate the training job with NVIDIA GPU support, you can use the Kubeflow Training Operator CUDA base image to gain access to the NVIDIA CUDA Toolkit.
+Using this toolkit, you can accelerate your work by using libraries and tools that are optimized for NVIDIA GPUs. 
+
+| KFTO ROCm 
+| If you are working with compute-intensive models and you want to accelerate the training job with AMD GPU support, you can use the Kubeflow Training Operator ROCm base image to gain access to the AMD ROCm software stack.
+Using this software stack, you can accelerate your work by using libraries and tools that are optimized for AMD GPUs. 
+
+
+|===
+
+
+If the preinstalled packages that are provided in these images are not sufficient for your use case, you have the following options:
+
+* Install additional libraries after launching a default image. 
+This option is good if you want to add libraries on an ad hoc basis as you run training jobs. 
+However, it can be challenging to manage the dependencies of installed libraries.
+
+
+ifdef::upstream[]
+* Create a custom image that includes the additional libraries or packages. 
+For more information, see
+link:{odhdocshome}/working-with-distributed-workloads/#creating-a-custom-training-image_distributed-workloads[Creating a custom training image].
+endif::[]
+
+ifndef::upstream[]
+* Create a custom image that includes the additional libraries or packages. 
+For more information, see link:{rhoaidocshome}{default-format-url}/working_with_distributed_workloads/preparing-the-distributed-training-environment_distributed-workloads#creating-a-custom-training-image_distributed-workloads[Creating a custom training image].
+endif::[]

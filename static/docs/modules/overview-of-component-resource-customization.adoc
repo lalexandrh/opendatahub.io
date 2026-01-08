@@ -1,0 +1,53 @@
+:_module-type: CONCEPT
+
+[id='overview-of-component-resource-customization_{context}']
+= Overview of component resource customization
+
+[role='_abstract']
+You can customize deployment resources that are related to the {productname-long} Operator, for example, CPU and memory limits and requests. For resource customizations to persist without being overwritten by the Operator, the `opendatahub.io/managed: true` annotation must not be present in the YAML file for the component deployment. This annotation is absent by default.
+
+ifdef::upstream[]
+The following table shows the deployment names for each component in the `opendatahub` namespace:
+endif::[]
+ifndef::upstream[]
+The following table shows the deployment names for each component in the `pass:attributes[{dbd-config-default-namespace}]` namespace.
+
+[IMPORTANT]
+====
+Components denoted with `(Technology Preview)` in this table are not supported with {org-name} production service level agreements (SLAs) and might not be functionally complete. {org-name} does not recommend using Technology Preview features in production. These features provide early access to upcoming product features, enabling customers to test functionality and provide feedback during the development process. For more information about the support scope of {org-name} Technology Preview features, see link:https://access.redhat.com/support/offerings/techpreview/[Technology Preview Features Support Scope].
+====
+endif::[]
+
+|===
+| Component | Deployment names 
+
+| CodeFlare | codeflare-operator-manager 
+| KServe 
+a| * kserve-controller-manager 
+* odh-model-controller
+ifdef::upstream[]
+| TrustyAI | trustyai-service-operator-controller-manager
+endif::[]
+| Ray | kuberay-operator 
+| Kueue | kueue-controller-manager
+| Workbenches
+a| * notebook-controller-deployment 
+* odh-notebook-controller-manager
+ifdef::upstream[]
+| Dashboard | odh-dashboard
+endif::[]
+ifndef::upstream[]
+| Dashboard | rhods-dashboard
+endif::[]
+| Model serving
+a| * modelmesh-controller 
+* odh-model-controller
+ifdef::upstream[]
+| Model registry | model-registry-operator-controller-manager
+endif::[]
+ifndef::upstream[]
+| Model registry | model-registry-operator-controller-manager
+endif::[]
+| Data science pipelines | data-science-pipelines-operator-controller-manager
+| Training Operator | kubeflow-training-operator
+|===

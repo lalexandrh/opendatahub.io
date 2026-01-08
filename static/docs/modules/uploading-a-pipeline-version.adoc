@@ -1,0 +1,34 @@
+:_module-type: PROCEDURE
+
+[id="uploading-a-pipeline-version_{context}"]
+= Uploading a pipeline version
+
+[role='_abstract']
+You can upload a YAML file to an active pipeline server that contains the latest version of your pipeline, or you can upload the YAML file from a URL. The YAML file must consist of a Kubeflow pipeline compiled by using the Kubeflow compiler. After you upload a pipeline version to a pipeline server, you can execute it by creating a pipeline run.
+
+.Prerequisites
+* You have logged in to {productname-long}.
+* You have previously created a data science project that is available and contains a configured pipeline server.
+* You have a pipeline version available and ready to upload. 
+* If you are uploading your pipeline version from a URL, the URL is publicly accessible. 
+* If your pipeline version is based on Python code, compile it to YAML before uploading. For more information, see _Compiling the pipeline YAML with the Kubeflow Pipelines SDK_.
+
+.Procedure
+. From the {productname-short} dashboard, click *Data science pipelines* -> *Pipelines*.
+. On the *Pipelines* page, from the *Project* drop-down list, select the project that you want to upload a pipeline version to.
+. Click the *Import pipeline* drop-down list, and then select *Upload new version*.
+. In the *Upload new version* dialog, enter the details for the pipeline version that you are uploading.
+.. From the *Pipeline* list, select the pipeline that you want to upload your pipeline version to. 
+.. In the *Pipeline version name* field, confirm the name for the pipeline version, and change it if necessary.  
+.. In the *Pipeline version description* field, enter a description for the pipeline version.
+.. Select where you want to upload your pipeline version from by performing one of the following actions:
+* Select *Upload a file* to upload your pipeline version from your local machine's file system. Import your pipeline version by clicking *Upload*, or by dragging and dropping a file.
+* Select *Import by url* to upload your pipeline version from a URL, and then enter the URL into the text box.  
+.. Click *Upload*.
+
+.Verification
+* The pipeline version that you uploaded is displayed on the *Pipelines* page. Click *Expand* (image:images/rhoai-expand-icon.png[]) on the row containing the pipeline to view its versions.
+* The *Version* column on the row containing the pipeline version that you uploaded on the *Pipelines* page increments by one. 
+
+//[role='_additional-resources']
+//.Additional resources//

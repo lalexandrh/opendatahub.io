@@ -1,0 +1,29 @@
+:_module-type: PROCEDURE
+
+[id="downloading-pipeline-step-logs_{context}"]
+= Downloading pipeline step logs
+
+[role='_abstract']
+Instead of viewing the step logs of a pipeline run using the log viewer on the {productname-short} dashboard, you can download them for further analysis. You can choose to download the logs belonging to all steps in your pipeline, or you can download the log only for the step log displayed in the log viewer.
+
+.Prerequisites
+* You have logged in to {productname-long}.
+* You have previously created a data science project that is available and contains a pipeline server.
+* You have imported a pipeline to an active pipeline server.
+* You have previously triggered a pipeline run.
+
+.Procedure
+. From the {productname-short} dashboard, click *Data science pipelines* -> *Runs*.
+. On the *Runs* page, from the *Project* drop-down list, select the project that you want to download logs for.
+. On the *Runs* page, click the name of the run that you want to download logs for.
+. On the run details page, on the *Graph* tab, click the pipeline step that you want to download logs for.
+. Click the *Logs* tab.
+. In the log viewer, click the *Download* button (image:images/rhoai-download-icon.png[]).
+.. Select *Download current stop log* to download the log for the current pipeline step. 
+.. Select *Download all step logs* to download the logs for all steps in your pipeline run.
+
+.Verification
+* The step logs download to your browser's default directory for downloaded files.
+
+//[role='_additional-resources']
+//.Additional resources

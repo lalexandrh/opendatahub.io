@@ -1,0 +1,135 @@
+:_module-type: PROCEDURE
+
+[id="creating-a-workbench-for-distributed-training_{context}"]
+= Creating a workbench for distributed training
+
+[role='_abstract']
+Create a workbench with the appropriate resources to run a distributed training or tuning job.
+
+ifdef::upstream[]
+[IMPORTANT]
+====
+By default, hardware profiles, including Kueue-enabled profiles, are hidden in the dashboard navigation menu and user interface, while accelerator profiles remain visible. In addition, user interface components associated with the deprecated accelerator profiles functionality are still displayed. To show the *Settings -> Hardware profiles* option in the dashboard navigation menu, and the user interface components associated with hardware profiles and Kueue functionality, set the `disableHardwareProfiles` and `disableKueue` values to `false` in the `OdhDashboardConfig` custom resource (CR) in {openshift-platform}. 
+
+For more information about setting dashboard configuration options, see link:{odhdocshome}/managing-resources/#customizing-the-dashboard[Customizing the dashboard].
+====
+endif::[]
+
+ifndef::upstream[]
+[IMPORTANT]
+====
+ifdef::self-managed[]
+The hardware profiles feature is currently available in {productname-long} {vernum} as a Technology Preview feature.
+endif::[]
+ifdef::cloud-service[]
+The hardware profiles feature is currently available in {productname-long} as a Technology Preview feature.
+endif::[]
+Technology Preview features are not supported with {org-name} production service level agreements (SLAs) and might not be functionally complete.
+{org-name} does not recommend using them in production.
+These features provide early access to upcoming product features, enabling customers to test functionality and provide feedback during the development process.
+
+For more information about the support scope of {org-name} Technology Preview features, see link:https://access.redhat.com/support/offerings/techpreview/[Technology Preview Features Support Scope].
+
+By default, hardware profiles, including Kueue-enabled profiles, are hidden in the dashboard navigation menu and user interface, while accelerator profiles remain visible. In addition, user interface components associated with the deprecated accelerator profiles functionality are still displayed. To show the *Settings -> Hardware profiles* option in the dashboard navigation menu, and the user interface components associated with hardware profiles and Kueue functionality, set the `disableHardwareProfiles` and `disableKueue` values to `false` in the `OdhDashboardConfig` custom resource (CR) in {openshift-platform}. 
+
+For more information about setting dashboard configuration options, see link:{rhoaidocshome}{default-format-url}/managing_resources/customizing-the-dashboard[Customizing the dashboard].
+====
+endif::[]
+
+.Prerequisites
+
+* You can access an OpenShift cluster that has sufficient worker nodes with supported accelerators to run your training or tuning job.
+
+* Your cluster administrator has configured the cluster as follows:
+
+ifdef::upstream[]
+* Installed and activated the {rhbok-productname} Operator, as described in link:{odhdocshome}/managing-odh/#configuring-workload-management-with-kueue_kueue[Configuring workload management with Kueue].
+endif::[]
+ifndef::upstream[]
+* Installed and activated the {rhbok-productname} Operator, as described in link:{rhoaidocshome}{default-format-url}/managing_openshift_ai/managing-workloads-with-kueue#configuring-workload-management-with-kueue_kueue[Configuring workload management with Kueue].
+endif::[]
+
+ifdef::upstream[]
+** Installed {productname-long} with the required distributed training components, as described in link:{odhdocshome}/installing-open-data-hub/#installing-the-distributed-workloads-components_install[Installing the distributed workloads components].
+endif::[]
+ifdef::self-managed[]
+** Installed {productname-long} with the required distributed training components, as described in link:{rhoaidocshome}{default-format-url}/installing_and_uninstalling_{url-productname-short}/installing-the-distributed-workloads-components_install[Installing the distributed workloads components] (for disconnected environments, see link:{rhoaidocshome}{default-format-url}/installing_and_uninstalling_{url-productname-short}_in_a_disconnected_environment/installing-the-distributed-workloads-components_install[Installing the distributed workloads components]).
+endif::[]
+ifdef::cloud-service[]
+** Installed {productname-long} with the required distributed training components, as described in link:{rhoaidocshome}{default-format-url}/installing_and_uninstalling_{url-productname-short}/installing-the-distributed-workloads-components_install[Installing the distributed workloads components].
+endif::[]
+
+ifdef::upstream[]
+** Configured the distributed training resources, as described in link:{odhdocshome}/managing-odh/#managing-distributed-workloads_managing-odh[Managing distributed workloads].
+endif::[]
+ifndef::upstream[]
+** Configured the distributed training resources, as described in link:{rhoaidocshome}{default-format-url}/managing_openshift_ai/managing-distributed-workloads_managing-rhoai[Managing distributed workloads].
+endif::[]
+
+ifdef::upstream[]
+** Configured supported accelerators, as described in link:{odhdocshome}/working-with-accelerators[Working with accelerators].
+endif::[]
+ifndef::upstream[]
+** Configured supported accelerators, as described in link:{rhoaidocshome}{default-format-url}/working_with_accelerators/[Working with accelerators].
+endif::[]
+
+.Procedure
+. Log in to the {productname-long} web console.
+
+. If you want to add the workbench to an existing project, open the project and proceed to the next step. 
++
+If you want to add the workbench to a new project, create the project as follows:
+
+.. In the left navigation pane, click *Data science projects*, and click *Create project*.
+.. Enter a project name, and optionally a description, and click *Create*.
+The project details page opens, with the *Overview* tab selected by default.
+
+. Create a workbench as follows:
+.. On the project details page, click the *Workbench* tab, and click *Create workbench*.
+.. Enter a workbench name, and optionally a description.
+.. In the *Workbench image* section, from the *Image selection* list, select the appropriate image for your training or tuning job.
+If project-scoped images exist, the *Image selection* list includes subheadings to distinguish between global images and project-scoped images.
++
+ifndef::upstream[]
+For example, to run the example fine-tuning job described in link:{rhoaidocshome}{default-format-url}/working_with_distributed_workloads/running-kfto-based-distributed-training-workloads_distributed-workloads#fine-tuning-a-model-by-using-kubeflow-training_distributed-workloads[Fine-tuning a model by using Kubeflow Training], select *PyTorch*.
+endif::[]
+ifdef::upstream[]
+For example, to run the example fine-tuning job described in link:{odhdocshome}/working-with-distributed-workloads/#fine-tuning-a-model-by-using-kubeflow-training_distributed-workloads[Fine-tuning a model by using Kubeflow Training], select *PyTorch*.
+endif::[]
+
+.. In the *Deployment size* section, from the *Hardware profile* list, select a suitable hardware profile for your workbench. 
++
+If project-scoped hardware profiles exist, the *Hardware profile* list includes subheadings to distinguish between global hardware profiles and project-scoped hardware profiles.
++
+The hardware profile specifies the number of CPUs and the amount of memory allocated to the container, setting the guaranteed minimum (request) and maximum (limit) for both. 
+
+.. If you want to change the default values, click *Customize resource requests and limit* and enter new minimum (request) and maximum (limit) values.
+
+.. In the *Cluster storage* section, click either *Attach existing storage* or *Create storage* to specify the storage details so that you can share data between the workbench and the training or tuning runs.
++
+ifndef::upstream[]
+For example, to run the example fine-tuning job described in link:{rhoaidocshome}{default-format-url}/working_with_distributed_workloads/running-kfto-based-distributed-training-workloads_distributed-workloads#fine-tuning-a-model-by-using-kubeflow-training_distributed-workloads[Fine-tuning a model by using Kubeflow Training], specify a storage class with ReadWriteMany (RWX) capability.
+endif::[]
+ifdef::upstream[]
+For example, to run the example fine-tuning job described in link:{odhdocshome}/working-with-distributed-workloads/#fine-tuning-a-model-by-using-kubeflow-training_distributed-workloads[Fine-tuning a model by using Kubeflow Training], specify a storage class with ReadWriteMany (RWX) capability.
+endif::[]
+.. Review the storage configuration and click *Create workbench*. 
+
+
+.Verification
+On the *Workbenches* tab, the status changes from *Starting* to *Running*.
+
+[role='_additional-resources']
+.Additional resources
+
+ifndef::upstream[]
+* link:{rhoaidocshome}{default-format-url}/working_on_data_science_projects/using-data-science-projects_projects#creating-a-data-science-project_projects[Creating a data science project]
+* link:{rhoaidocshome}{default-format-url}/working_on_data_science_projects/using-project-workbenches_projects#creating-a-workbench-select-ide_projects[Creating a workbench and selecting an IDE]
+* link:{rhoaidocshome}{default-format-url}/working_in_your_data_science_ide[Working in your data science IDE]
+* link:https://access.redhat.com/articles/rhoai-supported-configs[{productname-long}: Supported Configurations] Knowledgebase article
+endif::[]
+ifdef::upstream[]
+* link:{odhdocshome}/working-on-data-science-projects/#creating-a-data-science-project_projects[Creating a data science project]
+* link:{odhdocshome}/working-on-data-science-projects/#creating-a-workbench-select-ide_projects[Creating a workbench and selecting an IDE]
+* link:{odhdocshome}/working-in-your-data-science-ide[Working in your data science IDE]
+endif::[]

@@ -1,0 +1,51 @@
+:_module-type: PROCEDURE
+
+[id="viewing-pipeline-step-logs_{context}"]
+= Viewing pipeline step logs
+
+[role='_abstract']
+To help you troubleshoot and audit your pipelines, you can review and analyze the log of each pipeline step using the log viewer. From here, you can search for specific log messages and download the logs for each step in your pipeline. If the pipeline is running, you can also pause and resume the log from the log viewer.   
+
+[NOTE]
+====
+ifdef::upstream[]
+Logs are no longer stored in S3-compatible storage for Python scripts which are running in Elyra pipelines. From {productname-short} version 2.14, you can view these logs in the pipeline step log viewer.
+
+For this change to take effect, you must use the Elyra runtime images provided in the 2024.1 or 2024.2 workbench images.
+
+If you have an older workbench image version, update the *Version selection* field to `2024.1` or `2024.2`, as described in link:{odhdocshome}/working-on-data-science-projects/#updating-a-project-workbench_projects[Updating a project workbench].
+endif::[]
+
+ifndef::upstream[] 
+Logs are no longer stored in S3-compatible storage for Python scripts which are running in Elyra pipelines. From {productname-short} version 2.11, you can view these logs in the pipeline step log viewer.
+
+For this change to take effect, you must use the Elyra runtime images provided in workbench images at version 2024.1 or later.
+
+If you have an older workbench image version, update the *Version selection* field to a compatible workbench image version, for example, `2024.1`, as described in link:{rhoaidocshome}{default-format-url}/working_on_data_science_projects/using-project-workbenches_projects#updating-a-project-workbench_projects[Updating a project workbench].
+endif::[]
+
+Updating your workbench image version will clear any existing runtime image selections for your pipeline. After you update your workbench version, open your workbench IDE and update the properties of your pipeline to select a runtime image.
+====
+
+.Prerequisites
+* You have logged in to {productname-long}.
+* You have previously created a data science project that is available and contains a pipeline server.
+* You have imported a pipeline to an active pipeline server.
+* You have previously triggered a pipeline run.
+
+.Procedure
+. From the {productname-short} dashboard, click *Data science pipelines* -> *Runs*.
+. On the *Runs* page, from the *Project* drop-down list, select the project that you want to view pipeline step logs for.
+. On the *Runs* page, click the name of the run that you want to view logs for.
+. On the run details page, on the *Graph* tab, click the pipeline step that you want to view logs for.
+. Click the *Logs* tab.
+. To view the logs of another pipeline step, from the *Steps* list, select the step that you want to view logs for.
+. Analyze the log using the log viewer.
+* To search for a specific log message, enter at least part of the message in the search bar. 
+* To view the full log in a separate browser window, click the action menu (&#8942;) and select *View raw logs*. Alternatively, to expand the size of the log viewer, click the action menu (&#8942;) and select *Expand*.
+
+.Verification
+* You can view the logs for each step in your pipeline. 
+
+//[role='_additional-resources']
+//.Additional resources

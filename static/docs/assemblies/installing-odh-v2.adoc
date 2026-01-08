@@ -1,0 +1,29 @@
+:_module-type: ASSEMBLY
+
+ifdef::context[:parent-context: {context}]
+
+:context: installv2
+
+[id="installing-odh-v2_{context}"]
+= Installing Open Data Hub version 2
+
+[role='_abstract']
+You can install {productname-short} version 2 on {openshift-platform} from the OpenShift web console. 
+For information about upgrading the {productname-short} Operator, see link:{odhdocshome}/upgrading-open-data-hub[Upgrading Open Data Hub].
+ 
+Installing {productname-short} involves the following tasks:
+
+. Optional: Configuring custom namespaces.
+. Installing the {productname-short} Operator.
+. Installing {productname-short} components.
+. Accessing the {productname-short} dashboard.
+
+include::modules/configuring-custom-namespaces.adoc[leveloffset=+1]
+
+include::modules/installing-the-odh-operator-v2.adoc[leveloffset=+1]
+
+include::modules/installing-odh-components.adoc[leveloffset=+1]
+
+
+ifdef::parent-context[:context: {parent-context}]
+ifndef::parent-context[:!context:]

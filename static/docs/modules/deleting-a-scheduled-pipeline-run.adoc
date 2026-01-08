@@ -1,0 +1,28 @@
+:_module-type: PROCEDURE
+
+[id="deleting-a-scheduled-pipeline-run_{context}"]
+= Deleting a scheduled pipeline run
+
+[role='_abstract']
+To discard pipeline runs that you previously scheduled, but no longer require, you can delete them so that they do not appear on the *Schedules* page.
+
+.Prerequisites
+* You have logged in to {productname-long}.
+* You have previously created a data science project that is available and contains a configured pipeline server.
+* You have imported a pipeline to an active pipeline server.
+* You have previously scheduled a run that is available to delete.
+
+.Procedure
+. From the {productname-short} dashboard, click *Experiments* -> *Experiments and runs*.
+. On the *Experiments* page, from the *Project* drop-down list, select the project that contains the pipeline experiment for the scheduled pipeline run that you want to delete.
+. From the list of pipeline experiments, click the experiment that contains the scheduled pipeline run that you want to delete. 
+. On the *Runs* page, click the *Schedules* tab.
+. Click the action menu (*&#8942;*) beside the scheduled pipeline run that you want to delete, and then click *Delete*.
+. In the *Delete schedule* dialog, enter the run name in the text field to confirm that you intend to delete it.
+. Click *Delete*.
+
+.Verification
+* The run that you deleted is no longer displayed on the *Schedules* tab for the pipeline experiment.
+
+//[role='_additional-resources']
+//.Additional resources

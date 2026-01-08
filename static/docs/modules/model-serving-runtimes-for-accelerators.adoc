@@ -1,0 +1,98 @@
+:_module-type: REFERENCE
+
+[id="model-serving-runtimes-for-accelerators_{context}"]
+= Model-serving runtimes for accelerators
+
+[role="_abstract"]
+{productname-short} provides support for accelerators through preinstalled model-serving runtimes.
+
+== NVIDIA GPUs
+
+ifndef::upstream[]
+You can serve models with NVIDIA graphics processing units (GPUs) by using the *vLLM NVIDIA GPU ServingRuntime for KServe* runtime. To use the runtime, you must enable GPU support in {productname-short}. This includes installing and configuring the Node Feature Discovery Operator on your cluster. For more information, see link:https://docs.redhat.com/en/documentation/openshift_container_platform/{ocp-latest-version}/html/specialized_hardware_and_driver_enablement/psap-node-feature-discovery-operator#installing-the-node-feature-discovery-operator_psap-node-feature-discovery-operator[Installing the Node Feature Discovery Operator^] and link:{rhoaidocshome}{default-format-url}/managing_openshift_ai/enabling-accelerators#enabling-nvidia-gpus_managing-rhoai[Enabling NVIDIA GPUs^].
+endif::[]
+
+ifdef::upstream[]
+You can serve models with NVIDIA graphics processing units (GPUs) by using the *vLLM NVIDIA GPU ServingRuntime for KServe* runtime. To use the runtime, you must enable GPU support in {productname-short}. This includes installing the Node Feature Discovery and NVIDIA GPU Operators. For more information, see link:https://docs.nvidia.com/datacenter/cloud-native/openshift/latest/index.html[NVIDIA GPU Operator on {org-name} OpenShift Container Platform^] in the NVIDIA documentation.
+endif::[]
+
+
+== Intel Gaudi accelerators
+
+ifdef::upstream[]
+You can serve models with Intel Gaudi accelerators by using the *vLLM Intel Gaudi Accelerator ServingRuntime for KServe* runtime. To use the runtime, you must enable hybrid processing (HPU) support in {productname-short}. This includes installing the Intel Gaudi Base Operator and configuring a hardware profile. For more information, see link:https://docs.habana.ai/en/latest/Installation_Guide/Additional_Installation/OpenShift_Installation/index.html#openshift-installation[Intel Gaudi Base Operator OpenShift installation^] and link:{odhdocshome}/working-with-accelerators/#working-with-hardware-profiles_accelerators[Working with hardware profiles^].
+
+For information about recommended vLLM parameters, environment variables, supported configurations and more, see link:https://github.com/HabanaAI/vllm-fork/blob/habana_main/README_GAUDI.md[vLLM with Intel® Gaudi® AI Accelerators^].
+endif::[]
+
+ifndef::upstream[]
+You can serve models with Intel Gaudi accelerators by using the *vLLM Intel Gaudi Accelerator ServingRuntime for KServe* runtime. To use the runtime, you must enable hybrid processing (HPU) support in {productname-short}. This includes installing the Intel Gaudi Base Operator and configuring a hardware profile. For more information, see link:https://docs.habana.ai/en/latest/Installation_Guide/Additional_Installation/OpenShift_Installation/index.html#openshift-installation[Intel Gaudi Base Operator OpenShift installation^] and link:{rhoaidocshome}{default-format-url}/working_with_accelerators/working-with-hardware-profiles_accelerators[Working with hardware profiles^]. 
+
+For information about recommended vLLM parameters, environment variables, supported configurations and more, see link:https://github.com/HabanaAI/vllm-fork/blob/habana_main/README_GAUDI.md[vLLM with Intel® Gaudi® AI Accelerators^].
+endif::[]
+[NOTE]
+====
+Warm-up is a model initialization and performance optimization step that is useful for reducing cold-start delays and first-inference latency. Depending on the model size, warm-up can lead to longer model loading times. 
+
+While highly recommended in production environments to avoid performance limitations, you can choose to skip warm-up for non-production environments to reduce model loading times and accelerate model development and testing cycles.
+ifndef::upstream[]
+To skip warm-up, follow the steps described in link:{rhoaidocshome}{default-format-url}/configuring_your_model-serving_platform/customizing_model_deployments#customizing-parameters-serving-runtime_rhoai-admin[Customizing the parameters of a deployed model-serving runtime] to add the following environment variable in the *Configuration parameters* section of your model deployment:
+[source]
+----
+`VLLM_SKIP_WARMUP="true"`
+----
+endif::[]
+ifdef::upstream[]
+To skip warm-up, follow the steps described in link:{odhdocshome}/configuring-your-model-serving-platform#adding-a-custom-model-serving-runtime-for-the-single-model-serving-platform[Customizing the parameters of a deployed model-serving runtime] to add the following environment variable in the *Configuration parameters* section of your model deployment:
+[source]
+----
+`VLLM_SKIP_WARMUP="true"`
+----
+endif::[]
+====
+
+== AMD GPUs
+
+ifdef::upstream[]
+You can serve models with AMD GPUs by using the *vLLM AMD GPU ServingRuntime for KServe* runtime. To use the runtime, you must enable support for AMD graphic processing units (GPUs) in {productname-short}. This includes installing the AMD GPU operator and configuring a hardware profile. For more information, see link:https://instinct.docs.amd.com/projects/gpu-operator/en/latest/installation/openshift-olm.html[Deploying the AMD GPU operator on OpenShift^] and link:{odhdocshome}/working-with-accelerators/#working-with-hardware-profiles_accelerators[Working with hardware profiles^].
+endif::[]
+
+ifndef::upstream[]
+You can serve models with AMD GPUs by using the *vLLM AMD GPU ServingRuntime for KServe* runtime. To use the runtime, you must enable support for AMD graphic processing units (GPUs) in {productname-short}. This includes installing the AMD GPU operator and configuring a hardware profile. For more information, see link:https://instinct.docs.amd.com/projects/gpu-operator/en/latest/installation/openshift-olm.html[Deploying the AMD GPU operator on OpenShift^] in the AMD documentation and link:{rhoaidocshome}{default-format-url}/working_with_accelerators/working-with-hardware-profiles_accelerators[Working with hardware profiles^].
+endif::[]
+
+== IBM Spyre AI accelerators on x86
+ifndef::upstream[]
+[IMPORTANT]
+====
+ifdef::self-managed[]
+Support for IBM Spyre AI Accelerators on x86 is currently available in {productname-long} {vernum} as a Technology Preview feature.
+endif::[]
+ifdef::cloud-service[]
+Support for IBM Spyre AI Accelerators on x86 is currently available in {productname-long} as a Technology Preview feature.
+endif::[]
+Technology Preview features are not supported with {org-name} production service level agreements (SLAs) and might not be functionally complete.
+{org-name} does not recommend using them in production.
+These features provide early access to upcoming product features, enabling customers to test functionality and provide feedback during the development process.
+
+For more information about the support scope of {org-name} Technology Preview features, see link:https://access.redhat.com/support/offerings/techpreview/[Technology Preview Features Support Scope].
+====
+endif::[]
+
+ifdef::upstream[]
+You can serve models with IBM Spyre AI accelerators on x86 by using the *vLLM Spyre AI Accelerator ServingRuntime for KServe* runtime. To use the runtime, you must install the Spyre Operator and configure a hardware profile. For more information, see link:https://catalog.redhat.com/en/software/containers/ibm-aiu/spyre-operator/688a1121575e62c686a471d4[Spyre operator image^] and link:{odhdocshome}/working-with-accelerators/#working-with-hardware-profiles_accelerators[Working with hardware profiles^].
+endif::[]
+
+ifndef::upstream[]
+You can serve models with IBM Spyre AI accelerators on x86 by using the *vLLM Spyre AI Accelerator ServingRuntime for KServe* runtime. To use the runtime, you must install the Spyre Operator and configure a hardware profile. For more information, see link:https://catalog.redhat.com/en/software/containers/ibm-aiu/spyre-operator/688a1121575e62c686a471d4[Spyre operator image^] and link:{rhoaidocshome}{default-format-url}/working_with_accelerators/working-with-hardware-profiles_accelerators[Working with hardware profiles^].
+endif::[]
+
+
+[role="_additional-resources"]
+.Additional resources
+ifndef::upstream[]
+* link:{rhoaidocshome}{default-format-url}/configuring_your_model-serving_platform/configuring-your-model-serving-platform_rhoai-admin#supported-model-serving-runtimes_rhoai-admin[Supported model-serving runtimes^]
+endif::[]
+ifdef::upstream[]
+* link:{odhdocshome}/configuring-your-model-serving-platform/#supported-model-serving-runtimes_odh-admin[Supported model-serving runtimes^]
+endif::[]

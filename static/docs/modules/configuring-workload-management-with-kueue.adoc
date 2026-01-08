@@ -1,0 +1,89 @@
+:_module-type: PROCEDURE
+
+[id="configuring-workload-management-with-kueue_{context}"]
+= Configuring workload management with Kueue
+
+[role="_abstract"]
+To use workload queuing in {productname-short}, install the {rhbok-productname} Operator and activate the Kueue integration in {productname-short}.
+
+.Prerequisites
+* You have cluster administrator privileges for your {openshift-platform} cluster.
+* You are using {openshift-platform} 4.18 or later.
+* You have installed and configured the *cert-manager Operator for {org-name} OpenShift* for your cluster.
+* You have installed the {openshift-cli} as described in the appropriate documentation for your cluster:
+ifdef::upstream,self-managed[]
+** link:https://docs.redhat.com/en/documentation/openshift_container_platform/{ocp-latest-version}/html/cli_tools/openshift-cli-oc#installing-openshift-cli[Installing the OpenShift CLI^] for OpenShift Container Platform  
+** link:https://docs.redhat.com/en/documentation/red_hat_openshift_service_on_aws/{rosa-latest-version}/html/cli_tools/openshift-cli-oc#installing-openshift-cli[Installing the OpenShift CLI^] for {rosa-productname}
+endif::[]
+ifdef::cloud-service[]
+** link:https://docs.redhat.com/en/documentation/openshift_dedicated/{osd-latest-version}/html/cli_tools/openshift-cli-oc#installing-openshift-cli[Installing the OpenShift CLI^] for OpenShift Dedicated  
+** link:https://docs.redhat.com/en/documentation/red_hat_openshift_service_on_aws_classic_architecture/{rosa-classic-latest-version}/html/cli_tools/openshift-cli-oc#installing-openshift-cli[Installing the OpenShift CLI^] for {rosa-classic-productname}
+endif::[]
+
+.Procedure
+
+. In a terminal window, log in to the {openshift-cli} as shown in the following example:
++
+[source,subs="+quotes"]
+----
+$ oc login __<openshift_cluster_url>__ -u __<admin_username>__ -p __<password>__
+----
+
+. Install the {rhbok-productname} Operator on your {openshift-platform} cluster as described in the link:{rhbok-docs}[{rhbok-productname} documentation].
+
+. Activate the Kueue integration. You can use the predefined names for the default cluster queue and default local queue, or specify custom names.  
++
+* To use the predefined queue names (`default`), run the following command. Replace `<operator-namespace>` with your operator namespace. The default operator namespace is `pass:attributes[{operator-default-namespace}]`.  
++
+[source,terminal]
+----
+$ oc patch datasciencecluster default-dsc --type='merge' -p '{"spec":{"components":{"kueue":{"managementState":"Unmanaged"}}}}' -n <operator-namespace>
+----
++
+* To specify custom queue names, run the following command. Replace `<example-cluster-queue>` and `<example-local-queue>` with your custom queue names, and replace `<operator-namespace>` with your operator namespace. The default operator namespace is `pass:attributes[{operator-default-namespace}]`.
++
+[source,terminal]
+----
+$ oc patch datasciencecluster default-dsc --type='merge' -p '{"spec":{"components":{"kueue":{"managementState":"Unmanaged","defaultClusterQueueName":"<example-cluster-queue>","defaultLocalQueueName":"<example-local-queue>"}}}}' -n <operator-namespace>
+----
+
+.Verification
+
+. Verify that the {rhbok-productname} pods are running:
++
+[source,terminal]
+----
+$ oc get pods -n openshift-kueue-operator
+----
++
+You should see output similar to the following example:
++
+[source,subs="+quotes"]
+----
+kueue-controller-manager-d9fc745df-ph77w    1/1     Running
+openshift-kueue-operator-69cfbf45cf-lwtpm   1/1     Running
+----
+
+. Verify that the default `ClusterQueue` was created:
++
+[source,terminal]
+----
+$ oc get clusterqueues
+----
+
+.Next steps
+* Configure quotas by creating and modifying `ResourceFlavor`, `ClusterQueue`, and `LocalQueue` objects. For details, see the link:{rhbok-docs}[{rhbok-productname} documentation].
+* Enable Kueue in the dashboard so that users can select Kueue-enabled options when creating workloads. When you enable Kueue, you also enable Kueue management for all new projects created from the dashboard. 
+ifdef::upstream[]
+See link:{odhdocshome}/managing-odh/#enabling-kueue-in-the-dashboard_kueue[Enabling Kueue in the dashboard].
+endif::[]
+ifndef::upstream[]
+See link:{rhoaidocshome}{default-format-url}/managing_openshift_ai/managing-workloads-with-kueue#enabling-kueue-in-the-dashboard_kueue[Enabling Kueue in the dashboard].
+endif::[]
+* Cluster administrators and {productname-short} administrators can create hardware profiles so that users can submit workloads from the {productname-short} dashboard. 
+ifdef::upstream[]
+See link:{odhdocshome}/working-with-accelerators/#working-with-hardware-profiles_accelerators[Working with hardware profiles].
+endif::[]
+ifndef::upstream[]
+See link:{rhoaidocshome}{default-format-url}/working_with_accelerators/working-with-hardware-profiles_accelerators[Working with hardware profiles].
+endif::[]

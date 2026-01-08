@@ -1,0 +1,37 @@
+---
+layout: docs
+title: Working with connected applications
+permalink: /docs/working-with-connected-applications
+custom_css: asciidoc.css
+---
+
+:upstream:
+include::_artifacts/document-attributes-global.adoc[]
+
+:doctype: book
+:toc: left
+:compat-mode:
+:context: connected-apps
+
+= Working with connected applications
+
+You can extend {productname-long} capabilities by connecting to a wide range of open source and third-party applications, such as Starburst, Intel AI Tools, and IBM watsonx.ai.
+
+You can also remove unused applications from your {productname-short} dashboard so that you can focus on the applications that you are most likely to use. 
+
+include::modules/viewing-connected-applications.adoc[leveloffset=+1]
+
+include::modules/enabling-applications-connected.adoc[leveloffset=+1]
+
+include::modules/removing-disabled-applications.adoc[leveloffset=+1]
+
+include::assemblies/using-basic-workbenches.adoc[leveloffset=+1]
+
+include::assemblies/creating-and-importing-jupyter-notebooks.adoc[leveloffset=+2]
+
+include::assemblies/collaborating-on-jupyter-notebooks-by-using-git.adoc[leveloffset=+2]
+
+include::assemblies/managing-python-packages.adoc[leveloffset=+2]
+
+include::modules/updating-workbench-settings-by-restarting-your-workbench.adoc[leveloffset=+2]
+

@@ -1,0 +1,43 @@
+:_module-type: PROCEDURE
+
+[id="viewing-http-request-metrics-for-a-deployed-model_{context}"]
+= Viewing HTTP request metrics for a deployed model
+
+[role='_abstract']
+
+You can view a graph that illustrates the HTTP requests that have failed or succeeded for a specific model that is deployed on the multi-model serving platform.
+
+.Prerequisites
+* You have installed {productname-long}.
+* On the OpenShift cluster where {productname-short} is installed, user workload monitoring is enabled.
+* The following dashboard configuration options are set to the default values as shown:
++
+[source]
+----
+disablePerformanceMetrics:false
+disableKServeMetrics:false
+----
+ifdef::upstream[]
+For more information about setting dashboard configuration options, see link:{odhdocshome}/managing-resources/#customizing-the-dashboard[Customizing the dashboard].
+endif::[]
+ifndef::upstream[]
+For more information about setting dashboard configuration options, see link:{rhoaidocshome}{default-format-url}/managing_resources/customizing-the-dashboard[Customizing the dashboard].
+endif::[] 
+* You have logged in to {productname-long}.
+* You have deployed models on the multi-model serving platform.
+
+.Procedure 
+
+. From the {productname-short} dashboard, click *Models* -> *Model deployments*.
+
+. On the *Model deployments* page, select the model that you are interested in.
+
+. Optional: On the *Endpoint performance* tab, set the following options:
+
+** *Time range* - Specifies how long to track the metrics. You can select one of these values: 1 hour, 24 hours, 7 days, and 30 days.
+
+** *Refresh interval* - Specifies how frequently the graphs on the metrics page are refreshed (to show the latest data). You can select one of these values: 15 seconds, 30 seconds, 1 minute, 5 minutes, 15 minutes, 30 minutes, 1 hour, 2 hours, and 1 day.
+
+.Verification
+
+The *Endpoint performance* tab shows a graph of the HTTP metrics for the model.

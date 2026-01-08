@@ -1,0 +1,107 @@
+:_module-type: PROCEDURE
+
+[id='creating-a-model-registry_{context}']
+= Creating a model registry
+
+[role='_abstract']
+You can create a model registry to store, share, version, deploy, and track your models.
+
+.Prerequisites
+* You have logged in to {productname-short} as a user with {productname-short} administrator privileges. 
+ifdef::upstream[]
+* The model registry component is enabled in your {productname-short} deployment. For more information, see link:{odhdocshome}/working-with-model-registries/#enabling-the-model-registry-component_model-registry[Enabling the model registry component].
+endif::[]
+ifdef::self-managed[]
+* The model registry component is enabled in your {productname-short} deployment. For more information, see link:{rhoaidocshome}{default-format-url}/enabling_the_model_registry_component[Enabling the model registry component].
+endif::[]
+* You have access to an external MySQL database which uses at least MySQL version 5.x. However, {org-name} recommends that you use MySQL version 8.x.
+
+.Procedure
+. From the {productname-short} dashboard, click *Settings* -> *Model registry settings*.
+. Click *Create model registry*.
++
+The *Create model registry* dialog opens.
+. In the *Name* field, enter a name for the model registry.
+. Optional: Click *Edit resource name*, and then enter a specific resource name for the model registry in the *Resource name* field. By default, the resource name will match the name of the model registry.
++
+[IMPORTANT]
+====
+Resource names are what your resources are labeled as in OpenShift. Your resource name cannot exceed 253 characters, must consist of lowercase alphanumeric characters or '-', and must start and end with an alphanumeric character. Resource names are not editable after creation.
+
+The resource name must not match the name of any other model registry resource in your OpenShift cluster.
+====
+. Optional: In the *Description* field, enter a description for the model registry.
+. In the *Connect to external MySQL database* section, enter the information for the external database where your model data is stored.
+.. In the *Host* field, enter the database hostname.
+ifdef::upstream[]
+... If the database is running in the `pass:attributes[{mr-default-namespace}]` namespace, enter only the hostname for the database.
+... If the database is running in a different namespace from `pass:attributes[{mr-default-namespace}]`, enter the database hostname details in `<hostname>.<namespace>.svc.cluster.local` format.
+endif::[]
+ifndef::upstream[]
+... If the database is running in the `pass:attributes[{mr-default-namespace}]` namespace, enter only the hostname for the database.
+... If the database is running in a different namespace from `pass:attributes[{mr-default-namespace}]`, enter the database hostname details in `<hostname>.<namespace>.svc.cluster.local` format.
+endif::[]
+.. In the *Port* field, enter the port number for the database.
+.. In the *Username* field, enter the default user name that is connected to the database.
+.. In the *Password* field, enter the password for the default user account.
+.. In the *Database* field, enter the database name.
+. Optional: Select the *Add CA certificate to secure database connection* to use a certificate with your database connection.
++
+[IMPORTANT]
+====
+If your external database is configured to enforce Transport Layer Security (TLS), then you must add a Certificate Authority (CA) certificate.
+====
+.. Click *Use cluster-wide CA bundle* to use the `ca-bundle.crt` bundle in the `odh-trusted-ca-bundle` ConfigMap.
+.. Click *Use {productname-long} CA bundle* to use the `odh-ca-bundle.crt` bundle in the `odh-trusted-ca-bundle` ConfigMap.
+ifdef::upstream[]
+.. Click *Choose from existing certificates* to select an existing certificate. You can select the key of any ConfigMap or secret in the `pass:attributes[{mr-default-namespace}]` namespace.
+endif::[]
+ifndef::upstream[]
+.. Click *Choose from existing certificates* to select an existing certificate. You can select the key of any ConfigMap or secret in the `pass:attributes[{mr-default-namespace}]` namespace.
+endif::[]
+... From the *Resource* list, select a ConfigMap or secret. 
+... From the *Key* list, select a key.
+.. Click *Upload new certificate* to upload a new certificate as a ConfigMap.
+... Drag and drop the PEM file for your certificate into the *Certificate* field, or click *Upload* to select a file from your local machine's file system.
++
+[NOTE]
+====
+Uploading a certificate creates the `db-credential` ConfigMap with the `ca.crt` key. 
+
+ifdef::upstream[]
+To upload a certificate as a secret, you must create a secret in the {openshift-platform} `pass:attributes[{mr-default-namespace}]` namespace, and then select it as an existing certificate when you create your model registry.
+
+For more information about creating secrets in {openshift-platform}, see link:https://docs.redhat.com/en/documentation/openshift_container_platform/{ocp-latest-version}/html/nodes/working-with-pods#nodes-pods-secrets[Providing sensitive data to pods by using secrets].
+endif::[]
+ifndef::upstream[]
+To upload a certificate as a secret, you must create a secret in the {openshift-platform} `pass:attributes[{mr-default-namespace}]` namespace, and then select it as an existing certificate when you create your model registry.
+
+ifdef::self-managed[]
+For more information about creating secrets, see link:https://docs.redhat.com/en/documentation/openshift_container_platform/{ocp-latest-version}/html/nodes/working-with-pods#nodes-pods-secrets[Providing sensitive data to pods by using secrets] in the OpenShift Container Platform documentation.
+endif::[]
+ifdef::cloud-service[]
+For more information about creating secrets, see link:https://docs.redhat.com/en/documentation/openshift_dedicated/{osd-latest-version}/html/nodes/working-with-pods#nodes-pods-secrets-about_nodes-pods-secrets[Providing sensitive data to pods by using secrets] in the OpenShift Dedicated documentation or link:https://docs.redhat.com/en/documentation/red_hat_openshift_service_on_aws_classic_architecture/{rosa-classic-latest-version}/html/nodes/working-with-pods#nodes-pods-secrets-about_nodes-pods-secrets[Providing sensitive data to pods by using secrets] in the {rosa-classic-productname} documentation.
+endif::[]
+endif::[]
+====
++
+. Click *Create*.
+
+[NOTE]
+====
+To find the resource name or type of a model registry, click the help icon image:images/rhoai-help-icon.png[Help icon] beside the registry name. Resource names and types are used to find your resources in OpenShift.
+====
+
+.Verification
+* The new model registry is displayed on the *Model registry settings* page.
+* You can edit the model registry by clicking the action menu (*&#8942;*) beside it, and then clicking *Edit model registry*.
+ifdef::upstream[]
+* You can register a model with the model registry from the *Model registry* tab. For more information about working with model registries, see link:{odhdocshome}/working-with-model-registries/#working-with-model-registries_model-registry[Working with model registries].
+endif::[]
+ifndef::upstream[]
+* You can register a model with the model registry from the *Model registry* tab. For more information about working with model registries, see link:{rhoaidocshome}{default-format-url}/working_with_model_registries/index[Working with model registries].
+endif::[]
+
+// [role="_additional-resources"]
+// .Additional resources
+// * TODO or delete

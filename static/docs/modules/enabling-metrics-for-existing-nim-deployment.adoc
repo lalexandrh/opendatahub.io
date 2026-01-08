@@ -1,0 +1,207 @@
+:_module-type: PROCEDURE
+
+[id="enabling-nim-metrics-for-an-existing-nim-deployment_{context}"]
+= Enabling NVIDIA NIM metrics for an existing NIM deployment 
+
+[role="_abstract"]
+
+ifdef::self-managed[]
+If you have previously deployed a NIM model in {productname-short}, and then upgraded to {vernum}, you must manually enable NIM metrics for your existing deployment by adding annotations to enable metrics collection and graph generation.
+endif::[]
+
+ifdef::cloud-service,upstream[]
+If you have previously deployed a NIM model in {productname-short}, and then upgraded to the latest version, you must manually enable NIM metrics for your existing deployment by adding annotations to enable metrics collection and graph generation.
+endif::[]
+
+ifdef::self-managed[]
+[NOTE]
+====
+NIM metrics and graphs are automatically enabled for new deployments in 2.17.
+====
+endif::[]
+ifdef::cloud-service,upstream[]
+[NOTE]
+====
+NIM metrics and graphs are automatically enabled for new deployments in the latest version of {productname-short}.
+====
+endif::[]
+
+== Enabling graph generation for an existing NIM deployment
+The following procedure describes how to enable graph generation for an existing NIM deployment.
+
+.Prerequisites
+
+* You have cluster administrator privileges for your {openshift-platform} cluster.
+* You have installed the {openshift-cli} as described in the appropriate documentation for your cluster:
+ifdef::upstream,self-managed[]
+** link:https://docs.redhat.com/en/documentation/openshift_container_platform/{ocp-latest-version}/html/cli_tools/openshift-cli-oc#installing-openshift-cli[Installing the OpenShift CLI^] for OpenShift Container Platform  
+** link:https://docs.redhat.com/en/documentation/red_hat_openshift_service_on_aws/{rosa-latest-version}/html/cli_tools/openshift-cli-oc#installing-openshift-cli[Installing the OpenShift CLI^] for {rosa-productname}
+endif::[]
+ifdef::cloud-service[]
+** link:https://docs.redhat.com/en/documentation/openshift_dedicated/{osd-latest-version}/html/cli_tools/openshift-cli-oc#installing-openshift-cli[Installing the OpenShift CLI^] for OpenShift Dedicated  
+** link:https://docs.redhat.com/en/documentation/red_hat_openshift_service_on_aws_classic_architecture/{rosa-classic-latest-version}/html/cli_tools/openshift-cli-oc#installing-openshift-cli[Installing the OpenShift CLI^] for {rosa-classic-productname}
+endif::[]
+* You have an existing NIM deployment in {productname-short}.
+
+.Procedure
+. In a terminal window, if you are not already logged in to your {openshift-platform} cluster as a cluster administrator, log in to the {openshift-cli}.
+. Confirm the name of the `ServingRuntime` associated with your NIM deployment:
++
+[source]
+----
+oc get servingruntime -n <namespace>
+----  
++
+Replace `<namespace>` with the namespace of the project where your NIM model is deployed. 
+. Check for an existing `metadata.annotations` section in the `ServingRuntime` configuration:
++
+[source]
+----
+oc get servingruntime -n  <namespace> <servingruntime-name> -o json | jq '.metadata.annotations'
+---- 
++
+Replace <servingruntime-name> with the name of the `ServingRuntime` from the previous step.
+. Perform one of the following actions:
+.. If the `metadata.annotations` section is not present in the configuration, add the section with the required annotations:
++
+[source]
+----
+oc patch servingruntime -n <namespace> <servingruntime-name> --type json --patch \
+ '[{"op": "add", "path": "/metadata/annotations", "value": {"runtimes.opendatahub.io/nvidia-nim": "true"}}]'
+----
++
+You see output similar to the following:
++
+[source]
+----
+servingruntime.serving.kserve.io/nim-serving-runtime patched
+----
+.. If there is an existing `metadata.annotations` section, add the required annotations to the section:
++
+[source]
+----
+oc patch servingruntime -n <project-namespace> <runtime-name> --type json --patch \
+ '[{"op": "add", "path": "/metadata/annotations/runtimes.opendatahub.io~1nvidia-nim", "value": "true"}]'
+----
++
+You see output similar to the following:
++
+[source]
+----
+servingruntime.serving.kserve.io/nim-serving-runtime patched
+----
+
+ 
+.Verification
+
+* Confirm that the annotation has been added to the `ServingRuntime` of your existing NIM deployment.
++
+[source]
+----
+oc get servingruntime -n <namespace> <servingruntime-name> -o json | jq '.metadata.annotations'
+----
++
+The annotation that you added is displayed in the output:
++
+[source]
+----
+...
+"runtimes.opendatahub.io/nvidia-nim": "true"
+----
++
+[NOTE]
+====
+For metrics to be available for graph generation, you must also enable metrics collection for your deployment. Please see link:{rhoaidocshome}{default-format-url}/managing_and_monitoring_models/managing_and_monitoring_models_on_the_nvidia_nim_model_serving_platform#enabling-nim-metrics-for-an-existing-nim-deployment_cluster-admin[Enabling metrics collection for an existing NIM deployment].
+====
+
+== Enabling metrics collection for an existing NIM deployment
+
+To enable metrics collection for your existing NIM deployment, you must manually add the Prometheus endpoint and port annotations to the `InferenceService` of your deployment. 
+
+The following procedure describes how to add the required Prometheus annotations to the `InferenceService` of your NIM deployment. 
+
+.Prerequisites
+
+* You have cluster administrator privileges for your {openshift-platform} cluster.
+* You have installed the {openshift-cli} as described in the appropriate documentation for your cluster:
+ifdef::upstream,self-managed[]
+** link:https://docs.redhat.com/en/documentation/openshift_container_platform/{ocp-latest-version}/html/cli_tools/openshift-cli-oc#installing-openshift-cli[Installing the OpenShift CLI^] for OpenShift Container Platform  
+** link:https://docs.redhat.com/en/documentation/red_hat_openshift_service_on_aws/{rosa-latest-version}/html/cli_tools/openshift-cli-oc#installing-openshift-cli[Installing the OpenShift CLI^] for {rosa-productname}
+endif::[]
+ifdef::cloud-service[]
+** link:https://docs.redhat.com/en/documentation/openshift_dedicated/{osd-latest-version}/html/cli_tools/openshift-cli-oc#installing-openshift-cli[Installing the OpenShift CLI^] for OpenShift Dedicated  
+** link:https://docs.redhat.com/en/documentation/red_hat_openshift_service_on_aws_classic_architecture/{rosa-classic-latest-version}/html/cli_tools/openshift-cli-oc#installing-openshift-cli[Installing the OpenShift CLI^] for {rosa-classic-productname}
+endif::[]
+* You have an existing NIM deployment in {productname-short}.
+
+.Procedure
+. In a terminal window, if you are not already logged in to your {openshift-platform} cluster as a cluster administrator, log in to the {openshift-cli}.
+. Confirm the name of the `InferenceService` associated with your NIM deployment:
++
+[source]
+----
+oc get inferenceservice -n <namespace>
+----
++
+Replace `<namespace>` with the namespace of the project where your NIM model is deployed.
+. Check if there is an existing `spec.predictor.annotations` section in the `InferenceService` configuration:
++
+[source]
+----
+oc get inferenceservice -n <namespace> <inferenceservice-name> -o json | jq '.spec.predictor.annotations'
+----
++
+Replace <inferenceservice-name> with the name of the `InferenceService` from the previous step.
+. Perform one of the following actions:
+.. If the `spec.predictor.annotations` section does not exist in the configuration, add the section and required annotations:
++
+[source]
+----
+oc patch inferenceservice -n <namespace> <inference-name> --type json --patch \
+ '[{"op": "add", "path": "/spec/predictor/annotations", "value": {"prometheus.io/path": "/metrics", "prometheus.io/port": "8000"}}]'
+----
++
+The annotation that you added is displayed in the output:
++
+[source]
+----
+inferenceservice.serving.kserve.io/nim-serving-runtime patched
+----
+.. If there is an existing `spec.predictor.annotations` section, add the Prometheus annotations to the section:
++
+[source]
+----
+oc patch inferenceservice -n <namespace> <inference-service-name> --type json --patch \
+ '[{"op": "add", "path": "/spec/predictor/annotations/prometheus.io~1path", "value": "/metrics"},
+ {"op": "add", "path": "/spec/predictor/annotations/prometheus.io~1port", "value": "8000"}]'
+---- 
++
+The annotations that you added is displayed in the output:
++
+[source]
+----
+inferenceservice.serving.kserve.io/nim-serving-runtime patched
+----
+
+.Verification
+
+* Confirm that the annotations have been added to the `InferenceService`.
++
+[source]
+----
+oc get inferenceservice -n <namespace> <inferenceservice-name> -o json | jq '.spec.predictor.annotations'
+----
++
+You see the annotation that you added in the output:
++
+[source]
+----
+{
+  "prometheus.io/path": "/metrics",
+  "prometheus.io/port": "8000"
+}
+----
+
+
+// [role="_additional-resources"]
+// .Additional resources

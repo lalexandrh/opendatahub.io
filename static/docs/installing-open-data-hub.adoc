@@ -1,0 +1,29 @@
+---
+layout: docs
+title: Installing Open Data Hub
+permalink: /docs/installing-open-data-hub
+custom_css: asciidoc.css
+---
+//:self-managed:
+:upstream:
+include::_artifacts/document-attributes-global.adoc[]
+
+
+:doctype: book
+:toc: left
+:compat-mode:
+:context: install
+
+= Installing Open Data Hub
+
+include::assemblies/installing-odh-v2.adoc[leveloffset=+1]
+
+include::modules/configuring-pipelines-with-your-own-argo-workflows-instance.adoc[leveloffset=+1]
+
+include::modules/installing-the-distributed-workloads-components.adoc[leveloffset=+1]
+
+include::modules/accessing-the-odh-dashboard.adoc[leveloffset=+1]
+
+include::assemblies/working-with-certificates.adoc[leveloffset=+1]
+
+include::assemblies/viewing-logs-and-audit-records.adoc[leveloffset=+1]

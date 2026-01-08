@@ -1,0 +1,184 @@
+:_module-type: PROCEDURE
+
+[id="creating-a-project-workbench_{context}"]
+= Creating a workbench
+
+When you create a workbench, you specify an image (an IDE, packages, and other dependencies). You can also configure connections, cluster storage, and add container storage.
+
+
+.Prerequisites
+* You have logged in to {productname-long}.
+* You have created a project. 
+ifndef::upstream[]
+* If you created a Simple Storage Service (S3) account outside of {productname-long} and you want to create connections to your existing S3 storage buckets, you have the following credential information for the storage buckets:
++
+--			
+** Endpoint URL 						
+** Access key 						
+** Secret key 						
+** Region
+** Bucket name 
+--
++
+For more information, see link:{rhoaidocshome}{default-format-url}/working_with_data_in_an_s3-compatible_object_store[Working with data in an S3-compatible object store].
+endif::[]
+
+
+.Procedure
+. From the {productname-short} dashboard, click *Data science projects*.
++
+The *Data science projects* page opens.
+. Click the name of the project that you want to add the workbench to.
++
+A project details page opens.
+. Click the *Workbenches* tab.
+. Click *Create workbench*.
++
+The *Create workbench* page opens.
+. In the *Name* field, enter a unique name for your workbench.
+
+. Optional: If you want to change the default resource name for your workbench, click *Edit resource name*. 
++
+The resource name is what your resource is labeled in OpenShift.
+Valid characters include lowercase letters, numbers, and hyphens (-).
+The resource name cannot exceed 30 characters, and it must start with a letter and end with a letter or number.
++
+*Note:* You cannot change the resource name after the workbench is created.
+You can edit only the display name and the description.
+
+
+. Optional: In the *Description* field, enter a description for your workbench.
+. In the *Workbench image* section, complete the fields to specify the workbench image to use with your workbench.
++
+From the *Image selection* list, select a workbench image that suits your use case. A workbench image includes an IDE and Python packages (reusable code). 
+If project-scoped images exist, the *Image selection* list includes subheadings to distinguish between global images and project-scoped images.
++
+Optionally, click *View package information* to view a list of packages that are included in the image that you selected.
++
+If the workbench image has multiple versions available, select the workbench image version to use from the *Version selection* list. To use the latest package versions, Red Hat recommends that you use the most recently added image. 
++
+NOTE: You can change the workbench image after you create the workbench.
+
+. In the *Deployment size* section, select one of the following options, depending on whether the hardware profiles feature is enabled.
++
+ifndef::upstream[]
+[IMPORTANT]
+====
+ifdef::self-managed[]
+The hardware profiles feature is currently available in {productname-long} {vernum} as a Technology Preview feature.
+endif::[]
+ifdef::cloud-service[]
+The hardware profiles feature is currently available in {productname-long} as a Technology Preview feature.
+endif::[]
+Technology Preview features are not supported with {org-name} production service level agreements (SLAs) and might not be functionally complete.
+{org-name} does not recommend using them in production.
+These features provide early access to upcoming product features, enabling customers to test functionality and provide feedback during the development process.
+
+For more information about the support scope of {org-name} Technology Preview features, see link:https://access.redhat.com/support/offerings/techpreview/[Technology Preview Features Support Scope].
+====
+endif::[]
+
+* If the hardware profiles feature is not enabled:
+
+.. From the *Container size* list, select the appropriate size for the size of the model that you want to train or tune.
++
+ifndef::upstream[]
+For example, to run the example fine-tuning job described in link:{rhoaidocshome}{default-format-url}/working_with_distributed_workloads/running-kfto-based-distributed-training-workloads_distributed-workloads#fine-tuning-a-model-by-using-kubeflow-training_distributed-workloads[Fine-tuning a model by using Kubeflow Training], select *Medium*.
+endif::[]
+ifdef::upstream[]
+For example, to run the example fine-tuning job described in link:{odhdocshome}/working-with-distributed-workloads/#fine-tuning-a-model-by-using-kubeflow-training_distributed-workloads[Fine-tuning a model by using Kubeflow Training], select *Medium*.
+endif::[]
+
+.. From the *Accelerator* list, select a suitable accelerator profile for your workbench.
++
+If project-scoped accelerator profiles exist, the *Accelerator* list includes subheadings to distinguish between global accelerator profiles and project-scoped accelerator profiles.
+
+* If the hardware profiles feature is enabled:
+
+.. From the *Hardware profile* list, select a suitable hardware profile for your workbench. 
++
+If project-scoped hardware profiles exist, the *Hardware profile* list includes subheadings to distinguish between global hardware profiles and project-scoped hardware profiles.
++
+The hardware profile specifies the number of CPUs and the amount of memory allocated to the container, setting the guaranteed minimum (request) and maximum (limit) for both. 
+
+.. If you want to change the default values, click *Customize resource requests and limit* and enter new minimum (request) and maximum (limit) values.
++
+[IMPORTANT]
+====
+By default, the hardware profiles feature is not enabled: hardware profiles are not shown in the dashboard navigation menu or elsewhere in the user interface. 
+In addition, user interface components associated with the deprecated accelerator profiles functionality are still displayed. 
+To show the *Settings* -> *Hardware profiles* option in the dashboard navigation menu, and the user interface components associated with hardware profiles, set the `disableHardwareProfiles` value to `false` in the `OdhDashboardConfig` custom resource (CR) in {openshift-platform}. 
+ifdef::upstream[]
+For more information about setting dashboard configuration options, see link:{odhdocshome}/managing-resources/#customizing-the-dashboard[Customizing the dashboard].
+endif::[]
+ifndef::upstream[]
+For more information about setting dashboard configuration options, see link:{rhoaidocshome}{default-format-url}/managing_resources/customizing-the-dashboard[Customizing the dashboard].
+endif::[] 
+==== 
+
+. Optional: In the *Environment variables* section, select and specify values for any environment variables. 
++
+Setting environment variables during the workbench configuration helps you save time later because you do not need to define them in the body of your workbenches, or with the IDE command line interface. 
++
+If you are using S3-compatible storage, add these recommended environment variables:
++
+--
+* `AWS_ACCESS_KEY_ID` specifies your Access Key ID for Amazon Web Services.
+* `AWS_SECRET_ACCESS_KEY` specifies your Secret access key for the account specified in `AWS_ACCESS_KEY_ID`. 
+--
++
+{productname-short} stores the credentials as Kubernetes secrets in a protected namespace if you select *Secret* when you add the variable. 
+
+. In the *Cluster storage* section, configure the storage for your workbench. Select one of the following options:
+* *Create new persistent storage* to create storage that is retained after you shut down your workbench. Complete the relevant fields to define the storage:
+.. Enter a *name* for the cluster storage.
+.. Enter a *description* for the cluster storage.
+.. Select a *storage class* for the cluster storage.
++
+NOTE: You cannot change the storage class after you add the cluster storage to the workbench.
+ifndef::upstream[]
+.. For storage classes that support multiple access modes, select an *Access mode* to define how the volume can be accessed. For more information, see link:{rhoaidocshome}{default-format-url}/managing_resources/managing-storage-classes#about-persistent-storage_resource-mgmt[About persistent storage].  
+endif::[]
+ifdef::upstream[]
+.. For storage classes that support multiple access modes, select an *Access mode* to define how the volume can be accessed. For more information, see link:{odhdocshome}/managing-resources/#about-persistent-storage_managing-resources[About persistent storage]. 
+endif::[]
++
+Only the access modes that have been enabled for the storage class by your cluster and {productname-short} administrators are visible.
+.. Under *Persistent storage size*, enter a new size in gibibytes or mebibytes.
+* *Use existing persistent storage* to reuse existing storage and select the storage from the *Persistent storage* list. 
+
+. Optional: You can add a connection to your workbench. A connection is a resource that contains the configuration parameters needed to connect to a data source or sink, such as an object storage bucket. You can use storage buckets for storing data, models, and pipeline artifacts. You can also use a connection to specify the location of a model that you want to deploy.
++
+In the *Connections* section, use an existing connection or create a new connection: 
++
+--
+* Use an existing connection as follows:
+.. Click *Attach existing connections*.
+.. From the *Connection* list, select a connection that you previously defined.
+
+* Create a new connection as follows:
+.. Click *Create connection*. The *Add connection* dialog opens.
+.. From the *Connection type* drop-down list, select the type of connection. The *Connection details* section is displayed.
+.. If you selected *S3 compatible object storage* in the preceding step, configure the connection details:
+... In the *Connection name* field, enter a unique name for the connection.
+... Optional: In the *Description* field, enter a description for the connection.
+... In the *Access key* field, enter the access key ID for the S3-compatible object storage provider.
+... In the *Secret key* field, enter the secret access key for the S3-compatible object storage account that you specified.
+... In the *Endpoint* field, enter the endpoint of your S3-compatible object storage bucket.
+... In the *Region* field, enter the default region of your S3-compatible object storage account.
+... In the *Bucket* field, enter the name of your S3-compatible object storage bucket.
+... Click *Create*.
+.. If you selected *URI* in the preceding step, configure the connection details:
+... In the *Connection name* field, enter a unique name for the connection.
+... Optional: In the *Description* field, enter a description for the connection.
+... In the *URI* field, enter the Uniform Resource Identifier (URI).
+... Click *Create*.
+--
++
+. Click *Create workbench*.
+
+.Verification
+* The workbench that you created is visible on the *Workbenches* tab for the project.
+* Any cluster storage that you associated with the workbench during the creation process is displayed on the *Cluster storage* tab for the project.
+* The *Status* column on the *Workbenches* tab displays a status of *Starting* when the workbench server is starting, and *Running* when the workbench has successfully started.
+* Optional: Click the open icon (image:images/open.png[The open icon]) to open the IDE in a new window.

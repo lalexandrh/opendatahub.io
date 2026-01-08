@@ -1,0 +1,79 @@
+:_module-type: PROCEDURE
+
+[id="deploying-models-on-the-NVIDIA-NIM-model-serving-platform_{context}"]
+= Deploying models on the NVIDIA NIM model serving platform
+
+[role='_abstract']
+When you have enabled the *NVIDIA NIM model serving platform*, you can start to deploy NVIDIA-optimized models on the platform.
+
+.Prerequisites
+* You have logged in to {productname-long}.
+* You have enabled the *NVIDIA NIM model serving platform*.
+* You have created a data science project.
+ifdef::upstream[]
+* You have enabled support for graphic processing units (GPUs) in {productname-short}. This includes installing the Node Feature Discovery and NVIDIA GPU Operators. For more information, see https://docs.nvidia.com/datacenter/cloud-native/openshift/latest/index.html[NVIDIA GPU Operator on {org-name} OpenShift Container Platform^].
+endif::[]
+ifndef::upstream[]
+* You have enabled support for graphic processing units (GPUs) in {productname-short}. This includes installing the Node Feature Discovery Operator and NVIDIA GPU Operator. For more information, see link:https://docs.redhat.com/en/documentation/openshift_container_platform/{ocp-latest-version}/html/specialized_hardware_and_driver_enablement/psap-node-feature-discovery-operator#installing-the-node-feature-discovery-operator_psap-node-feature-discovery-operator[Installing the Node Feature Discovery Operator^] and link:{rhoaidocshome}{default-format-url}/managing_openshift_ai/enabling-accelerators#enabling-nvidia-gpus_managing-rhoai[Enabling NVIDIA GPUs^].
+endif::[]
+
+.Procedure
+. In the left menu, click *Data science projects*.
++
+The *Data science projects* page opens.
+. Click the name of the project that you want to deploy a model in.
++
+A project details page opens.
+. Click the *Models* tab.
+. In the *Models* section, perform one of the following actions:
++
+-- 
+* On the *​​NVIDIA NIM model serving platform* tile, click *Select NVIDIA NIM* on the tile, and then click *Deploy model*.
+* If you have previously selected the NVIDIA NIM model serving type, the *Models* page displays *NVIDIA model serving enabled* on the upper-right corner, along with the *Deploy model* button. To proceed, click *Deploy model*.
+--
+The *Deploy model* dialog opens.
+. Configure properties for deploying your model as follows:
+.. In the *Model deployment name* field, enter a unique name for the deployment.
+.. From the *NVIDIA NIM* list, select the NVIDIA NIM model that you want to deploy. For more information, see link:https://docs.nvidia.com/nim/large-language-models/latest/supported-models.html[Supported Models^]
+.. In the *NVIDIA NIM storage size* field, specify the size of the cluster storage instance that will be created to store the NVIDIA NIM model.
++
+[NOTE] 
+====
+When resizing a PersistentVolumeClaim (PVC) backed by Amazon EBS in {productname-short}, you may encounter `VolumeModificationRateExceeded: You've reached the maximum modification rate per volume limit.` To avoid this error, wait at least six hours between modifications per EBS volume. If you resize a PVC before the cooldown expires, the Amazon EBS CSI driver (`ebs.csi.aws.com`) fails with this error. This error is an Amazon EBS service limit that applies to all workloads using EBS-backed PVCs.
+====
++
+.. In the *Number of model server replicas to deploy* field, specify a value.
+.. From the *Model server size* list, select a value.
+. From the *Hardware profile* list, select a hardware profile.
++
+[IMPORTANT]
+====
+By default, hardware profiles are hidden in the dashboard navigation menu and user interface, while accelerator profiles remain visible. In addition, user interface components associated with the deprecated accelerator profiles functionality are still displayed. If you enable hardware profiles, the *Hardware profiles* list is displayed instead of the *Accelerator profiles* list. To show the *Settings -> Hardware profiles* option in the dashboard navigation menu, and the user interface components associated with hardware profiles, set the `disableHardwareProfiles` value to `false` in the `OdhDashboardConfig` custom resource (CR) in {openshift-platform}. 
+ifdef::upstream[]
+For more information about setting dashboard configuration options, see link:{odhdocshome}/managing-resources/#customizing-the-dashboard[Customizing the dashboard].
+endif::[]
+ifndef::upstream[]
+For more information about setting dashboard configuration options, see link:{rhoaidocshome}{default-format-url}/managing_resources/customizing-the-dashboard[Customizing the dashboard].
+endif::[] 
+====
+
+. Optional: Click *Customize resource requests and limit* and update the following values:
+.. In the *CPUs requests* field, specify the number of CPUs to use with your model server. Use the list beside this field to specify the value in cores or millicores.
+.. In the *CPU limits* field, specify the maximum number of CPUs to use with your model server. Use the list beside this field to specify the value in cores or millicores.
+.. In the *Memory requests* field, specify the requested memory for the model server in gibibytes (Gi).
+.. In the *Memory limits* field, specify the maximum memory limit for the model server in gibibytes (Gi).
+. Optional: In the *Model route* section, select the *Make deployed models available through an external route* checkbox to make your deployed models available to external clients.
+. To require token authentication for inference requests to the deployed model, perform the following actions:
+.. Select *Require token authentication*.
+.. In the *Service account name* field, enter the service account name that the token will be generated for.
+.. To add an additional service account, click *Add a service account* and enter another service account name.
+. Click *Deploy*.
+
+.Verification
+* Confirm that the deployed model is shown on the *Models* tab for the project, and on the *Model deployments* page of the dashboard with a checkmark in the *Status* column.
+
+[role="_additional-resources"]
+.Additional resources
+
+* link:https://docs.nvidia.com/nim/large-language-models/latest/api-reference.html[NVIDIA NIM API reference^]
+* link:https://docs.nvidia.com/nim/large-language-models/latest/supported-models.html[Supported Models^]

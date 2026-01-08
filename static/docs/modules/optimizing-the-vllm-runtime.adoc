@@ -1,0 +1,103 @@
+:_module-type: PROCEDURE
+
+[id="enabling-speculative-decoding-and-multi-modal-inferencing_{context}"]
+= Enabling speculative decoding and multi-modal inferencing 
+
+You can configure the *vLLM NVIDIA GPU ServingRuntime for KServe* runtime to use speculative decoding, a parallel processing technique to optimize inferencing time for large language models (LLMs).
+
+You can also configure the runtime to support inferencing for vision-language models (VLMs). VLMs are a subset of multi-modal models that integrate both visual and textual data.
+
+The following procedure describes customizing the *vLLM NVIDIA GPU ServingRuntime for KServe* runtime for speculative decoding and multi-modal inferencing.
+
+[role='_abstract']
+
+.Prerequisites
+
+* You have logged in to {productname-short} as a user with {productname-short} administrator privileges.
+* If you are using the vLLM model-serving runtime for speculative decoding with a draft model, you have stored the original model and the speculative model in the same folder within your S3-compatible object storage.
+
+
+.Procedure
+
+. Follow the steps to deploy a model as described in link:{rhoaidocshome}{default-format-url}/deploying_models/deploying_models_on_the_single_model_serving_platform#deploying-models-on-the-single-model-serving-platform_rhoai-user[Deploying models on the single-model serving platform].
+. In the *Serving runtime* field, select the *vLLM NVIDIA GPU ServingRuntime for KServe* runtime.
+. To configure the vLLM model-serving runtime for speculative decoding by matching n-grams in the prompt, add the following arguments under *Additional serving runtime arguments* in the *Configuration parameters* section:
++
+[source]
+----
+--speculative-model=[ngram]
+--num-speculative-tokens=<NUM_SPECULATIVE_TOKENS>
+--ngram-prompt-lookup-max=<NGRAM_PROMPT_LOOKUP_MAX>
+--use-v2-block-manager
+----
+.. Replace `<NUM_SPECULATIVE_TOKENS>` and `<NGRAM_PROMPT_LOOKUP_MAX>` with your own values.
++
+[NOTE]
+====
+Inferencing throughput varies depending on the model used for speculating with n-grams.
+====
+. To configure the vLLM model-serving runtime for speculative decoding with a draft model, add the following arguments under *Additional serving runtime arguments* in the *Configuration parameters* section:
++
+[source]
+----
+--port=8080
+--served-model-name={{.Name}}
+--distributed-executor-backend=mp
+--model=/mnt/models/<path_to_original_model>
+--speculative-model=/mnt/models/<path_to_speculative_model>
+--num-speculative-tokens=<NUM_SPECULATIVE_TOKENS>
+--use-v2-block-manager
+----
++ 
+.. Replace `<path_to_speculative_model>` and `<path_to_original_model>` with the paths to the speculative model and original model on your S3-compatible object storage.
+.. Replace `<NUM_SPECULATIVE_TOKENS>` with your own value.
+. To configure the vLLM model-serving runtime for multi-modal inferencing, add the following arguments under *Additional serving runtime arguments* in the *Configuration parameters* section:
++
+[source]
+----
+--trust-remote-code
+----
++
+[NOTE]
+====
+Only use the `--trust-remote-code` argument with models from trusted sources.
+====
+. Click *Deploy*.
+
+
+.Verification
+
+* If you have configured the vLLM model-serving runtime for speculative decoding, use the following example command to verify API requests to your deployed model:
++
+[source]
+----
+curl -v https://<inference_endpoint_url>:443/v1/chat/completions
+-H "Content-Type: application/json"
+-H "Authorization: Bearer <token>"
+----
+* If you have configured the vLLM model-serving runtime for multi-modal inferencing, use the following example command to verify API requests to the vision-language model (VLM) that you have deployed:
++
+[source]
+----
+curl -v https://<inference_endpoint_url>:443/v1/chat/completions
+-H "Content-Type: application/json"
+-H "Authorization: Bearer <token>"
+-d '{"model":"<model_name>",
+     "messages":
+        [{"role":"<role>",
+          "content":
+             [{"type":"text", "text":"<text>"
+              },
+              {"type":"image_url", "image_url":"<image_url_link>"
+              }
+             ]
+         }
+        ]
+    }'
+----
+
+[role='_additional-resources']
+.Additional resources
+
+* link:https://docs.vllm.ai/en/stable/serving/engine_args.html[vLLM: Engine Arguments]
+* link:https://docs.vllm.ai/en/latest/serving/openai_compatible_server.html[OpenAI Compatible Server]

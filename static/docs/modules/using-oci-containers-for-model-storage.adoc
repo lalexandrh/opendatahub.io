@@ -1,0 +1,34 @@
+:_module-type: PROCEDURE
+
+[id="using-oci-containers-for-model-storage_{context}"]
+= Using OCI containers for model storage
+
+[role='_abstract']
+
+As an alternative to storing a model in an S3 bucket or URI, you can upload models to Open Container Initiative (OCI) containers. Deploying models from OCI containers is also known as modelcars in KServe.
+
+Using OCI containers for model storage can help you:
+
+* Reduce startup times by avoiding downloading the same model multiple times.
+* Reduce disk space usage by reducing the number of models downloaded locally.
+* Improve model performance by allowing pre-fetched images.
+
+Using OCI containers for model storage involves the following tasks:
+
+* Storing a model in an OCI image.
+* Deploying a model from an OCI image by using either the user interface or the command line interface. To deploy a model by using:
+ifndef::upstream[]
+** The user interface, see link:{rhoaidocshome}{default-format-url}/deploying_models/deploying_models_on_the_single_model_serving_platform#deploying-models-on-the-single-model-serving-platform_rhoai-user[Deploying models on the single-model serving platform].
+** The command line interface, see link:{rhoaidocshome}{default-format-url}/deploying_models/deploying_models_on_the_single_model_serving_platform#deploying-model-stored-in-oci-image_rhoai-user[Deploying a model stored in an OCI image by using the CLI].
+endif::[]
+ifdef::upstream[]
+** The user interface, see link:{odhdocshome}/deploying-models/#deploying-models-using-the-single-model-serving-platform_odh-user[Deploying models on the single-model serving platform].
+** The command line interface, see link:{odhdocshome}/deploying-models/#deploying-model-stored-in-oci-image_odh-user[Deploying a model stored in an OCI image by using the CLI].
+endif::[]
+
+
+ifdef::upstream[]
+[role='_additional-resources']
+.Additional resources
+* link:https://kserve.github.io/website/latest/modelserving/storage/oci/[Serving models with OCI images]
+endif::[]

@@ -1,0 +1,146 @@
+:_module-type: PROCEDURE
+
+[id="configuring-custom-namespaces"]
+= Configuring custom namespaces
+
+[role='_abstract']
+
+By default, {productname-short} uses the following predefined namespaces:
+
+* `pass:attributes[{operator-default-namespace}]` contains the {productname-long} Operator
+* `pass:attributes[{dbd-config-default-namespace}]` includes the dashboard and other required components of {productname-short}
+* `pass:attributes[{workbench-default-namespace}]` is where basic workbenches are deployed by default
+//* `pass:attributes[{monitoring-default-namespace}]` contains services for monitoring
+
+If needed, you can define custom namespaces to use instead of the predefined ones before installing {productname-short}. This flexibility supports environments with naming policies or conventions and allows cluster administrators to control where components such as workbenches are deployed.
+
+ifndef::upstream[]
+Namespaces created by {productname-short} typically include `openshift` or `redhat` in their name. Do not rename these system namespaces because they are required for {productname-short} to function properly.
+endif::[]
+ifdef::upstream[]
+Namespaces created by {productname-short} typically include `openshift` or `opendatahub` in their name. Do not rename these system namespaces because they are required for {productname-short} to function properly.
+endif::[]
+
+.Prerequisites
+
+* You have access to an {productname-short} cluster with cluster administrator privileges.
+* You have installed the {openshift-cli} as described in the appropriate documentation for your cluster:
+ifdef::upstream,self-managed[]
+** link:https://docs.redhat.com/en/documentation/openshift_container_platform/{ocp-latest-version}/html/cli_tools/openshift-cli-oc#installing-openshift-cli[Installing the OpenShift CLI^] for OpenShift Container Platform  
+** link:https://docs.redhat.com/en/documentation/red_hat_openshift_service_on_aws/{rosa-latest-version}/html/cli_tools/openshift-cli-oc#installing-openshift-cli[Installing the OpenShift CLI^] for {rosa-productname}
+endif::[]
+ifdef::cloud-service[]
+** link:https://docs.redhat.com/en/documentation/openshift_dedicated/{osd-latest-version}/html/cli_tools/openshift-cli-oc#installing-openshift-cli[Installing the OpenShift CLI^] for OpenShift Dedicated  
+** link:https://docs.redhat.com/en/documentation/red_hat_openshift_service_on_aws_classic_architecture/{rosa-classic-latest-version}/html/cli_tools/openshift-cli-oc#installing-openshift-cli[Installing the OpenShift CLI^] for {rosa-classic-productname}
+endif::[]
+* You have not yet installed the {productname-long} Operator.
+
+.Procedure
+
+. In a terminal window, if you are not already logged in to your OpenShift cluster as a cluster administrator, log in to the {openshift-cli} as shown in the following example:
++
+[source,subs="+quotes"]
+----
+oc login __<openshift_cluster_url>__ -u __<admin_username>__ -p __<password>__
+----
+
+. Optional: To configure a custom operator namespace:
+
+.. Create a namespace YAML file named `operator-namespace.yaml`.
++
+[source,YAML]
+----
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: <operator-namespace> <1>
+----
+<1> Defines the operator namespace.
+
+.. Create the namespace in your {openshift-platform} cluster.
++
+[source]
+----
+$ oc create -f operator-namespace.yaml
+----
++
+You see output similar to the following:
++
+[source,subs="+quotes"]
+----
+namespace/__<operator-namespace>__ created
+----
+
+.. When you install the {productname-long} Operator, use this namespace instead of `pass:attributes[{operator-default-namespace}]`.
+
+. Optional: To configure a custom applications namespace: 
+
+.. Create a namespace YAML file named `applications-namespace.yaml`.
++
+[source,YAML]
+----
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: <applications-namespace> <1>
+  labels:
+    opendatahub.io/application-namespace: 'true' <2>
+----
+<1> Defines the applications namespace.
+<2> Adds the required label.
+
+.. Create the namespace in your {openshift-platform} cluster.
++
+[source]
+----
+$ oc create -f applications-namespace.yaml
+----
++
+You see output similar to the following:
++
+[source,subs="+quotes"]
+----
+namespace/__<applications-namespace>__ created
+----
+
+. Optional: To configure a custom workbench namespace: 
+
+.. Create a namespace YAML file named `workbench-namespace.yaml`.
++
+[source,YAML]
+----
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: <workbench-namespace> <1>
+----
+<1> Defines the workbench namespace.
+
+.. Create the namespace in your {openshift-platform} cluster.
++
+[source]
+----
+$ oc create -f workbench-namespace.yaml
+----
++
+You see output similar to the following:
++
+[source,subs="+quotes"]
+----
+namespace/__<workbench-namespace>__ created
+----
+
+.. When you install the {productname-long} components, specify this namespace for the `spec.workbenches.workbenchNamespace` field. You cannot change the default workbench namespace after you have installed the {productname-long} Operator.
+
+.Next step
+ifdef::upstream[]
+* link:{odhdocshome}/installing-open-data-hub/#installing-the-odh-operator-v2_installv2[Installing the {productname-short} Operator version 2].
+endif::[]
+ifdef::self-managed[]
+ifndef::disconnected[]
+* link:{rhoaidocshome}{default-format-url}/installing_and_uninstalling_{url-productname-short}/installing-and-deploying-openshift-ai_install#installing-the-openshift-data-science-operator_operator-install[Installing the {productname-long} Operator]
+endif::[]
+ifdef::disconnected[]
+link:{rhoaidocshome}{default-format-url}/installing_and_uninstalling_{url-productname-short}_in_a_disconnected_environment/deploying-openshift-ai-in-a-disconnected-environment_install#installing-the-openshift-data-science-operator_operator-install[Installing the {productname-long} Operator]
+endif::[]
+endif::[]

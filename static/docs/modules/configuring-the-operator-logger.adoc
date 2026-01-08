@@ -1,0 +1,102 @@
+:_module-type: PROCEDURE
+
+[id='configuring-the-operator-logger_{context}']
+= Configuring the {productname-short} Operator logger
+
+[role='_abstract']
+You can change the log level for {productname-short} Operator components by setting the `.spec.devFlags.logmode` flag for the *DSC Initialization*/`DSCI` custom resource during runtime. If you do not set a `logmode` value, the logger uses the INFO log level by default.
+
+The log level that you set with `.spec.devFlags.logmode` applies to all components, not just those in a *Managed* state.
+
+The following table shows the available log levels:
+
+|===
+| Log level | Stacktrace level | Verbosity | Output | Timestamp type 
+
+| `devel` or `development` | WARN | INFO | Console | Epoch timestamps 
+| `""`  (or no `logmode` value set) | ERROR | INFO | JSON | Human-readable timestamps 
+| `prod` or `production` | ERROR | INFO | JSON | Human-readable timestamps 
+|===
+
+Logs that are set to `devel` or `development` generate in a plain text console format.
+Logs that are set to `prod`, `production`, or which do not have a level set generate in a JSON format.
+
+.Prerequisites
+* You have administrator access to the `DSCInitialization` resources in the {openshift-platform} cluster.
+* You have installed the {openshift-cli} as described in the appropriate documentation for your cluster:
+ifdef::upstream,self-managed[]
+** link:https://docs.redhat.com/en/documentation/openshift_container_platform/{ocp-latest-version}/html/cli_tools/openshift-cli-oc#installing-openshift-cli[Installing the OpenShift CLI^] for OpenShift Container Platform  
+** link:https://docs.redhat.com/en/documentation/red_hat_openshift_service_on_aws/{rosa-latest-version}/html/cli_tools/openshift-cli-oc#installing-openshift-cli[Installing the OpenShift CLI^] for {rosa-productname}
+endif::[]
+ifdef::cloud-service[]
+** link:https://docs.redhat.com/en/documentation/openshift_dedicated/{osd-latest-version}/html/cli_tools/openshift-cli-oc#installing-openshift-cli[Installing the OpenShift CLI^] for OpenShift Dedicated  
+** link:https://docs.redhat.com/en/documentation/red_hat_openshift_service_on_aws_classic_architecture/{rosa-classic-latest-version}/html/cli_tools/openshift-cli-oc#installing-openshift-cli[Installing the OpenShift CLI^] for {rosa-classic-productname}
+endif::[]
+
+.Procedure
+. Log in to the {openshift-platform} as a cluster administrator.
+. Click *Operators* → *Installed Operators* and then click the {productname-long} Operator.
+. Click the *DSC Initialization* tab.
+. Click the *default-dsci* object.
+. Click the *YAML* tab.
+. In the `spec` section, update the `.spec.devFlags.logmode` flag with the log level that you want to set. 
++
+[source]
+----
+apiVersion: dscinitialization.opendatahub.io/v1
+kind: DSCInitialization
+metadata:
+  name: default-dsci
+spec:
+  devFlags:
+    logmode: development
+----
+. Click *Save*.
+
+You can also configure the log level from the {openshift-cli} by using the following command with the `logmode` value set to the log level that you want.
+
+[source]
+----
+oc patch dsci default-dsci -p '{"spec":{"devFlags":{"logmode":"development"}}}' --type=merge
+----
+
+.Verification
+
+* If you set the component log level to `devel` or `development`, logs generate more frequently and include logs at `WARN` level and above.
+* If you set the component log level to `prod` or `production`, or do not set a log level, logs generate less frequently and include logs at `ERROR` level or above.
+
+== Viewing the {productname-short} Operator logs
+
+ifdef::upstream[]
+. Log in to the {openshift-cli}.
+. Run the following command to stream logs from all Operator pods:
++
+[source]
+----
+for pod in $(oc get pods -l name=opendatahub-operator -n openshift-operators -o name); do
+  oc logs -f "$pod" -n openshift-operators &
+done
+----
++
+The Operator pod logs open in your terminal.
++
+TIP: Press `Ctrl+C` to stop viewing. To fully stop all log streams, run `kill $(jobs -p)`.
+endif::[]
+
+ifndef::upstream[]
+. Log in to the {openshift-cli}.
+. Run the following command to stream logs from all Operator pods:
++
+[source, subs="attributes+"]
+----
+for pod in $(oc get pods -l name=rhods-operator -n {operator-default-namespace} -o name); do
+  oc logs -f "$pod" -n {operator-default-namespace} &
+done
+----
++
+The Operator pod logs open in your terminal.
++
+TIP: Press `Ctrl+C` to stop viewing. To fully stop all log streams, run `kill $(jobs -p)`.
+
+You can also view each Operator pod log in the {openshift-platform} console by navigating to *Workloads* -> *Pods*, selecting the *`pass:attributes[{operator-default-namespace}]`* project, clicking a pod name, and then clicking the *Logs* tab.
+endif::[]

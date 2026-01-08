@@ -1,0 +1,164 @@
+:_module-type: PROCEDURE
+
+[id='api-custom-image-creating_{context}']
+= Creating a custom image by using the `ImageStream` CRD
+
+[role="_abstract"]
+You can create a custom image by using the `ImageStream` Custom Resource Definition (CRD).
+
+In the following procedure, you configure an `ImageStream` CRD and use it to create the `ImageStream` Custom Resource (CR) that defines the custom image. The `ImageStream` CR provides a URL for the custom image, which you need when you want to use the custom image to configure a workbench.
+
+*Note:* The custom image that you create also becomes available in the {productname-short} dashboard so that your data scientist users can select it when they create a workbench.
+
+.Prerequisites
+
+* You have cluster administrator privileges for your {openshift-platform} cluster.
+* You have installed the {openshift-cli} as described in the appropriate documentation for your cluster:
+ifdef::upstream,self-managed[]
+** link:https://docs.redhat.com/en/documentation/openshift_container_platform/{ocp-latest-version}/html/cli_tools/openshift-cli-oc#installing-openshift-cli[Installing the OpenShift CLI^] for OpenShift Container Platform  
+** link:https://docs.redhat.com/en/documentation/red_hat_openshift_service_on_aws/{rosa-latest-version}/html/cli_tools/openshift-cli-oc#installing-openshift-cli[Installing the OpenShift CLI^] for {rosa-productname}
+endif::[]
+ifdef::cloud-service[]
+** link:https://docs.redhat.com/en/documentation/openshift_dedicated/{osd-latest-version}/html/cli_tools/openshift-cli-oc#installing-openshift-cli[Installing the OpenShift CLI^] for OpenShift Dedicated  
+** link:https://docs.redhat.com/en/documentation/red_hat_openshift_service_on_aws_classic_architecture/{rosa-classic-latest-version}/html/cli_tools/openshift-cli-oc#installing-openshift-cli[Installing the OpenShift CLI^] for {rosa-classic-productname}
+endif::[]
+
+
+.Procedure
+
+. In a terminal window, if you are not already logged in to your {openshift-platform} cluster as a cluster administrator, log in as shown in the following example:
++
+[source,subs="+quotes"]
+----
+oc login __<openshift_cluster_url>__ -u __<admin_username>__ -p __<password>__
+----
+
+. Define the `ImageStream` CRD.
+
+.. Create a YAML manifest file named `notebook-image-stream.yaml`. 
+.. Copy the following configuration and paste it in the `notebook-image-stream.yaml` file:
++
+.Example `ImageStream`
+[source,yaml,subs="attributes+"]
+----
+kind: ImageStream
+apiVersion: image.openshift.io/v1
+metadata:
+  annotations:
+    opendatahub.io/notebook-image-desc: A custom Jupyter Notebook image # <1>
+    opendatahub.io/notebook-image-name: My Custom Notebook # <2>
+  name: my-custom-notebook
+  namespace: {dbd-config-default-namespace} # <3>
+  labels: # <4>
+    app.kubernetes.io/created-by: byon
+    opendatahub.io/dashboard: 'true'
+    opendatahub.io/notebook-image: 'true'
+    opendatahub.io/component: 'true'
+    platform.opendatahub.io/part-of: 'workbenches'
+    app.kubernetes.io/part-of: 'workbenches'
+spec:
+  lookupPolicy:
+    local: true
+  tags:
+    - name: '1.0' # <5>
+      annotations: # <6>
+        opendatahub.io/notebook-python-dependencies: '[{"name":"PyTorch","version":"2.2"}]' # <7>
+        opendatahub.io/notebook-software: '[{"name":"Python","version":"v3.11"}]' # <8>
+        opendatahub.io/workbench-image-recommended: 'true' # <9>
+        opendatahub.io/image-tag-outdated: 'true' # <10>
+        opendatahub.io/notebook-build-commit: '3e71410' # <11>
+      from:
+        kind: DockerImage
+        name: 'quay.io/modh/rocm-notebooks@sha256:199367d2946..b411433ffbb5f0988279b10150020af22db' # <12>
+      importPolicy: 
+      importPolicy:
+        importMode: Legacy
+      referencePolicy:
+        type: Source
+----
++
+The example YAML file includes the following information:
++
+<1> A description of the image.
+<2> The image name that is displayed in the drop down menu when a user creates a workbench in the {productname-short} dashboard.
+<3> The `pass:attributes[{dbd-config-default-namespace}]` namespace is the default namespace in which the `ImageStream` CR is created.
+<4> The labels that are required if you want the image to appear in the {productname-short} dashboard. The `app.kubernetes.io/created-by: byon` label identifies the origination of the image object.
+<5> Annotations that are required if you want to make the image available in the {productname-short} dashboard. 
+<6> The version for the image. You can configure multiple versions for the same image. For this example, the version is 1.0.
+<7> An annotation that gives the user information about the Python packages and versions that are pre-installed in the image.
+<8> An annotation that specifies information such as the Python version, Jupyter version, or CUDA version.
+<9> An annotation that specifies whether the `ImageStream` version is the default version of the image. Set this field to `'true'` if the `ImageStream` version is the default. Otherwise, set it to `'false'`. You must specify the `opendatahub.io/workbench-image-recommended` annotation field if there are multiple versions of the image with different configurations. If you have only one version of the image, set the field to `'true'`. 
+<10> An annotation that specifies whether the image version has tags that are outdated and out of the regular maintenance cycle.
+<11> An annotation that references the commit hash's build commit ID to identify the sources that the specific tag was built from.
+<12> The image registry path where the image has been uploaded.
+
+. To create the `ImageStream` CR, run the following command, where the `ImageStream` CRD YAML manifest file name is `notebook-image-stream.yaml`:
++
+[source,terminal]
+----
+oc create -f notebook-image-stream.yaml
+----
+
+.Verification
+
+. To verify that the `ImageStream` was successfully created, run the following command, where the name of the `ImageStream` is `my-custom-notebook`:
++
+[source,terminal, subs="attributes+"]
+----
+oc describe imagestream my-custom-notebook -n {dbd-config-default-namespace}
+----
++
+You should see output similar to the following example:
++
+.Example output 
+
+[source,yaml, subs="attributes+"]
+----
+Name:                   my-custom-notebook
+Namespace:              {dbd-config-default-namespace}
+Created:                6 minutes ago
+Labels:                 app.kubernetes.io/created-by=byon
+                        opendatahub.io/dashboard=true
+                        opendatahub.io/notebook-image=true
+Annotations:            kubectl.kubernetes.io/last-applied-configuration={"apiVersion":"image.openshift.io/v1","kind":"ImageStream","metadata":{"annotations":{"opendatahub.io/notebook-image-desc":"A custom Jupyter Notebook image","opendatahub.io/notebook-image-name":"My Custom Notebook"},"labels":{"app.kubernetes.io/created-by":"byon","opendatahub.io/dashboard":"true","opendatahub.io/notebook-image":"true"},"name":"my-custom-notebook","namespace":"redhat-ods-applications"},"spec":{"lookupPolicy":{"local":true},"tags":[{"annotations":{"opendatahub.io/notebook-python-dependencies":"[{\"name\":\"PyTorch\",\"version\":\"2.2\"}]","opendatahub.io/notebook-software":"[{\"name\":\"Python\",\"version\":\"v3.11\"}]","opendatahub.io/workbench-image-recommended":"true"},"from":{"kind":"DockerImage","name":"quay.io/modh/rocm-notebooks@sha256:199367d2946fc8....8279b10150020af22db"},"importPolicy":{"importMode":"Legacy"},"name":"1.0","referencePolicy":{"type":"Source"}}]}}
+
+                        opendatahub.io/notebook-image-desc=A custom Jupyter Notebook image
+                        opendatahub.io/notebook-image-name=My Custom Notebook
+                        openshift.io/image.dockerRepositoryCheck=2025-03-10T11:02:44Z
+Image Repository:       image-registry.openshift-image-registry.svc:5000/redhat-ods-applications/my-custom-notebook
+Image Lookup:           local=true
+Unique Images:          1
+Tags:                   1
+
+1.0
+  tagged from quay.io/modh/rocm-notebooks@sha256:199367d2946..b411433ffbb5f0988279b10150020af22db
+
+  * quay.io/modh/rocm-notebooks@sha256:199367d2946fc8427....1433ffbb5f0988279b10150020af22db
+      6 minutes ago
+----
+
+. To determine the URL for your custom image so that you can reference it when you create a workbench:
+.. Make a note of the values for the `Image Repository` and the `Tags` fields from the `ImageStream` output. 
++
+In the following example, the `Image Repository` value is `image-registry.openshift-image-registry.svc:5000/redhat-ods-applications/my-custom-notebook` and the `Tags` value is `1.0`:
++
+.Example output 
++
+[source,yaml]
+----
+....
+Image Repository:       image-registry.openshift-image-registry.svc:5000/redhat-ods-applications/my-custom-notebook
+Image Lookup:           local=true
+Unique Images:          1
+Tags:                   1
+1.0
+  tagged from quay.io/modh/rocm-notebooks@sha256:199367d2946..b411433ffbb5f0988279b10150020af22db
+....
+----
+
+.. Create a fully-formed image URL by combining the values for the `Image Repository` and the `Tags` fields, as shown in the following example:
++
+[source, terminal]
+----
+image-registry.openshift-image-registry.svc:5000/redhat-ods-applications/my-custom-notebook:1.0
+----

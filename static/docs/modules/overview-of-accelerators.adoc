@@ -1,0 +1,63 @@
+:_module-type: CONCEPT
+
+[id='overview-of-accelerators_{context}']
+= Overview of accelerators
+
+[role='_abstract']
+If you work with large data sets, you can use accelerators to optimize the performance of your data science models in {productname-short}. With accelerators, you can scale your work, reduce latency, and increase productivity. You can use accelerators in {productname-short} to assist your data scientists in the following tasks:
+
+* Natural language processing (NLP)
+* Inference
+* Training deep neural networks
+* Data cleansing and data processing
+
+You can use the following accelerators with {productname-short}:
+
+* NVIDIA graphics processing units (GPUs)
+** To use compute-heavy workloads in your models, you can enable NVIDIA graphics processing units (GPUs) in {productname-short}.
+** To enable NVIDIA GPUs on OpenShift, you must install the link:https://docs.nvidia.com/datacenter/cloud-native/openshift/latest/index.html[NVIDIA GPU Operator].
+* AMD graphics processing units (GPUs)
+** Use the AMD GPU Operator to enable AMD GPUs for workloads such as AI/ML training and inference.
+** To enable AMD GPUs on OpenShift, you must do the following tasks:
+*** Install the AMD GPU Operator.
+*** Follow the instructions for full deployment and driver configuration in the link:https://instinct.docs.amd.com/projects/gpu-operator/en/latest/index.html[AMD GPU Operator documentation].
+
+** Once installed, the AMD GPU Operator allows you to use the ROCm workbench images to streamline AI/ML workflows on AMD GPUs.
+* Intel Gaudi AI accelerators
+** Intel provides hardware accelerators intended for deep learning workloads.
+** Before you can enable Intel Gaudi AI accelerators in {productname-short}, you must install the necessary dependencies. Also, the version of the Intel Gaudi AI Operator that you install must match the version of the corresponding workbench image in your deployment.
+** A workbench image for Intel Gaudi accelerators is not included in {productname-short} by default. Instead, you must create and configure a custom workbench to enable Intel Gaudi AI support.
+** You can enable Intel Gaudi AI accelerators on-premises or with AWS DL1 compute nodes on an AWS instance.
+* IBM Spyre accelerator
+** The IBM Spyre Operator integrates Spyre accelerators directly into {productname-short} workflows. Before you enable IBM Spyre accelerators in {productname-short}, you must install the necessary dependencies.  
+** Ensure you have IBM Spyre accelerators present on one or more cluster nodes.  
+** Install the IBM Spyre Operator. For more information, see link:https://catalog.redhat.com/en/software/containers/ibm-aiu/spyre-operator/688a1121575e62c686a471d4?architecture=amd64[IBM Spyre Operator catalog entry].
+** For more information on configuring IBM Spyre accelerators for production-ready deployments, contact IBM support. 
+
+ifndef::upstream[]
+* Before you can use an accelerator in {productname-short}, you must enable GPU support in {productname-short}. This includes installing the Node Feature Discovery Operator and the corresponding GPU Operator. For more information, see link:https://docs.redhat.com/en/documentation/openshift_container_platform/{ocp-latest-version}/html/specialized_hardware_and_driver_enablement/psap-node-feature-discovery-operator#installing-the-node-feature-discovery-operator_psap-node-feature-discovery-operator[Installing the Node Feature Discovery Operator^].
+endif::[]
+ifdef::upstream[]
+* Before you can use an accelerator in {productname-short}, you must enable GPU support in {productname-short}. This includes installing the Node Feature Discovery Operator and the corresponding GPU Operator. 
+
+endif::[]
+In addition, your OpenShift instance must contain an associated hardware profile or accelerator profile. For accelerators that are new to your deployment, you must configure a hardware profile or accelerator profile for the accelerator in context. You can create a hardware profile from the *Settings* -> *Hardware profiles* page on the {productname-short} dashboard. If your deployment contains existing accelerators that had associated profiles already configured, the profiles are automatically created after you upgrade to the latest version of {productname-short}.
+
+[IMPORTANT]
+====
+By default, hardware profiles are hidden in the dashboard navigation menu and user interface, while accelerator profiles remain visible. In addition, user interface components associated with the deprecated accelerator profiles functionality are still displayed. To show the *Settings -> Hardware profiles* option in the dashboard navigation menu, and the user interface components associated with hardware profiles, set the `disableHardwareProfiles` value to `false` in the `OdhDashboardConfig` custom resource (CR) in {openshift-platform}. 
+ifdef::upstream[]
+For more information about setting dashboard configuration options, see link:{odhdocshome}/managing-resources/#customizing-the-dashboard[Customizing the dashboard].
+endif::[]
+ifndef::upstream[]
+For more information about setting dashboard configuration options, see link:{rhoaidocshome}{default-format-url}/managing_resources/customizing-the-dashboard[Customizing the dashboard].
+endif::[]
+==== 
+
+[role="_additional-resources"]
+.Additional resources
+* link:https://habana.ai/[Habana, an Intel Company]
+* link:https://aws.amazon.com/ec2/instance-types/dl1/[Amazon EC2 DL1 Instances]
+* link:https://rocm.docs.amd.com/en/latest/[AMD ROCm documentation]
+* link:https://github.com/ROCm/gpu-operator[AMD GPU Operator on GitHub]
+* link:https://linux.die.net/man/8/lspci[lspci(8) - Linux man page]

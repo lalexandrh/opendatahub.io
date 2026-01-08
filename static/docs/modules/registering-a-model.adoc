@@ -1,0 +1,58 @@
+:_module-type: PROCEDURE
+
+[id='registering-a-model_{context}']
+= Registering a model from the dashboard
+
+[role='_abstract']
+As a data scientist, you can register a model from the {productname-short} dashboard and create the first version of the new model.
+
+.Prerequisites
+* You are logged in to {productname-long}.
+* You have access to an available model registry in your deployment.
+
+.Procedure
+. From the {productname-short} dashboard, click *Models* -> *Model registry*.
+. From the *Model registry* drop-down list, select the model registry that you want to register a model in.
+. Click *Register model*.
++
+The *Register model* dialog opens.
+. In the *Model details* section, configure details to apply to all versions of the model:
+.. In the **Model name** field, enter a name for the model.
+.. Optional: In the **Model description** field, enter a description for the model.
+. In the *Version details* section, enter details to apply to the first version of the model:
+.. In the *Version name* field, enter a name for the model version.
+.. Optional: In the *Version description* field, enter a description for the first version of the model.
+.. In the *Source model format* field, enter the name of the model format, for example, `ONNX`.
+.. In the *Source model format version* field, enter the version of the model format.
+. In the *Model location* section, specify the location of the model by providing either object storage details, or a URI.
+.. To provide object storage details, ensure that the *Object storage* radio button is selected. 
+... To autofill the details of an existing connection:
+.... Click *Autofill from connection*. 
+.... In the *Autofill from connection* dialog that opens, from the *Project* drop-down list, select the data science project that contains the connection.
+.... From the *Connection name* drop-down list, select the connection that you want to use. 
++
+This list contains only object storage types which contain a bucket.
+.... Click *Autofill*.
+... Alternatively, manually fill out your object storage details:
+.... In the *Endpoint* field, enter the endpoint of your S3-compatible object storage bucket.
+.... In the *Bucket* field, enter the name of your S3-compatible object storage bucket.
+.... In the *Region* field, enter the region of your S3-compatible object storage account.
+.... In the **Path** field, enter a path to a model or folder. This path cannot point to a root folder.
+.. To provide a URI, ensure that the *URI* radio button is selected.
+... In the *URI* field, enter the URI for the model.
++
+[IMPORTANT]
+====
+Deployment of models that are registered by using a URI is currently supported for public OCI repositories only.
+====
+. Click *Register model*.
+
+.Verification
+* The new model and version details are displayed on the *Details* tab for the model version.
+* The new model and version are displayed on the *Model registry* page.
+
+// [role="_additional-resources"]
+// .Additional resources
+// * TODO or delete
+
+

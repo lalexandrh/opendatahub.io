@@ -1,0 +1,33 @@
+:_module-type: PROCEDURE
+
+[id="viewing-registered-models_{context}"]
+= Viewing registered models
+
+[role='_abstract']
+You can view the details of models registered in {productname-short}, such as registered versions, deployments, and metadata associated with the model.
+
+.Prerequisites
+* You have logged in to {productname-long}.
+* An available model registry exists in your deployment, and contains at least 1 registered model.
+* You have access to the model registry that contains the model that you want to view.
+
+.Procedure
+. From the {productname-short} dashboard, click *Models* -> *Model registry*.
+. From the *Model registry* drop-down list, select the model registry that contains the model that you want to view.
+. The *Model registry* page provides a high-level view of registered models, including the model name, latest version, deployments, labels, last modified timestamp, and owner of each model.
++
+Models are sorted by their *Last modified* timestamp by default.
+. Use the search bar to find a model in the list. You can filter with a keyword by default by entering a model name, description, or label. Alternatively, click the search bar drop-down list and select *Owner* to filter by entering a model owner.
++
+Searching by keyword performs a search across the name, description, and labels of registered models and their versions.
+. Click the name of a model to view the details page for the model:
+.. On the *Overview* tab, you can view model metadata such as labels, description, owner, model ID, last modified and created timestamps, and custom properties, along with latest versions and deployments. 
+.. On the *Versions* tab, you can view the registered versions of the model.
+.. On the *Deployments* tab, you can view deployments initiated from the model registry for this model.
+
+.Verification
+* You can view information about the selected model on the details page for the model.
+
+//[role='_additional-resources']
+//.Additional resources
+

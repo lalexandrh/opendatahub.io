@@ -1,0 +1,30 @@
+:_module-type: PROCEDURE
+
+[id="deleting-a-connection_{context}"]
+= Deleting a connection
+
+[role='_abstract']
+You can delete connections that are no longer relevant to your data science project.
+
+.Prerequisites
+* You have logged in to {productname-long}.
+* You have created a data science project with a connection.
+
+.Procedure
+. From the {productname-short} dashboard, click *Data science projects*.
++
+The *Data science projects* page opens.
+. Click the name of the project that you want to delete the connection from.
++
+A project details page opens.
+. Click the *Connections* tab.
+. Click the action menu (*&#8942;*) beside the connection that you want to delete and then click *Delete connection*.
++
+The *Delete connection* dialog opens.
+. Enter the name of the connection in the text field to confirm that you intend to delete it.
+. Click *Delete connection*.
+
+.Verification
+* The connection that you deleted is no longer displayed on the *Connections* page for the project.
+
+

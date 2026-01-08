@@ -1,0 +1,24 @@
+---
+layout: docs
+title: Upgrading Open Data Hub
+permalink: /docs/upgrading-open-data-hub
+custom_css: asciidoc.css
+---
+:upstream:
+include::_artifacts/document-attributes-global.adoc[]
+
+:doctype: book
+:toc: left
+:compat-mode:
+:context: upgrade
+
+= Upgrading Open Data Hub
+
+include::modules/overview-of-upgrading-odh.adoc[leveloffset=+1]
+
+include::assemblies/upgrading-odh-v2.adoc[leveloffset=+1]
+
+include::assemblies/upgrading-odh-v1-to-v2.adoc[leveloffset=+1]
+
+include::modules/installing-odh-components.adoc[leveloffset=+1]
+

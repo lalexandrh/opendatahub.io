@@ -1,0 +1,43 @@
+:_module-type: PROCEDURE
+
+[id="accessing-the-pipeline-editor_{context}"]
+= Accessing the pipeline editor
+
+[role='_abstract']
+You can use Elyra to create visual end-to-end pipeline workflows in JupyterLab. Elyra is an extension for JupyterLab that provides you with a Pipeline Editor to create pipeline workflows that can execute in {productname-short}.
+
+.Prerequisites
+* You have logged in to {productname-long}.
+* You have created a data science project.
+* You have created and configured a pipeline server within the data science project that contains your workbench.
++
+[IMPORTANT]
+====
+To ensure that the runtime configuration is created automatically, you must create the pipeline server before you create the workbench.
+====
+ifndef::upstream[]
+* You have created a workbench with a workbench image that contains the Elyra extension (Standard Data Science, TensorFlow, TrustyAI, ROCm-PyTorch, ROCm-TensorFlow, or PyTorch), as described in link:{rhoaidocshome}{default-format-url}/working_on_data_science_projects/using-project-workbenches_projects#creating-a-workbench-select-ide_projects[Creating a workbench and selecting an IDE].
+* You have started the workbench and opened the JupyterLab interface, as described in link:{rhoaidocshome}{default-format-url}/working_in_your_data_science_ide/accessing-your-workbench-ide_ide[Accessing your workbench IDE].
+endif::[]
+ifdef::upstream[]
+* You have created a workbench with a workbench image that contains the Elyra extension (Standard Data Science, TensorFlow, TrustyAI, ROCm-PyTorch, ROCm-TensorFlow, or PyTorch), as described in link:{odhdocshome}/working-on-data-science-projects/#creating-a-workbench-select-ide_projects[Creating a workbench and selecting an IDE].
+* You have started the workbench and opened the JupyterLab interface, as described in link:{odhdocshome}/working-in-your-data-science-ide/#accessing-your-workbench-ide_ide[Accessing your workbench IDE].
+endif::[]
++
+[IMPORTANT]
+====
+The Elyra pipeline editor is available in specific workbench images only. To use Elyra, the workbench must be based on a JupyterLab image. The Elyra extension is not available in code-server or RStudio IDEs. The workbench must also be derived from the Standard Data Science image. It is not available in Minimal Python or CUDA-based workbenches. All other supported JupyterLab-based workbench images have access to the Elyra extension.
+====
+* You have access to S3-compatible storage.
+
+.Procedure
+. After you open JupyterLab, confirm that the JupyterLab launcher is automatically displayed.
+. In the *Elyra* section of the JupyterLab launcher, click the *Pipeline Editor* tile.
++
+The Pipeline Editor opens.
+
+.Verification
+* You can view the Pipeline Editor in JupyterLab.
+
+//[role='_additional-resources']
+//.Additional resources//

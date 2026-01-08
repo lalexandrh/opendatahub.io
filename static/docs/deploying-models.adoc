@@ -1,0 +1,19 @@
+---
+layout: docs
+title: Deploying models
+permalink: /docs/deploying-models
+custom_css: asciidoc.css
+---
+
+:upstream:
+include::_artifacts/document-attributes-global.adoc[]
+
+:doctype: book
+:toc: left
+:compat-mode:
+:context: odh-user
+
+= Deploying models
+
+:context: odh-user
+include::assemblies/deploying-models.adoc[leveloffset=+1]

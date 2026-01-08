@@ -1,0 +1,26 @@
+:_module-type: PROCEDURE
+
+[id="viewing-archived-pipeline-runs_{context}"]
+= Viewing archived pipeline runs
+
+[role='_abstract']
+You can view a list of pipeline runs that you have archived. You can view details for your archived pipeline runs, such as the pipeline version, run status, duration, and execution start date.
+
+.Prerequisites
+
+* You have logged in to {productname-long}.
+* You have previously created a data science project that is available and has a pipeline server.
+* You have imported a pipeline to an active pipeline server.
+* An archived pipeline run exists.
+
+.Procedure
+. From the {productname-short} dashboard, click *Experiments* -> *Experiments and runs*.
+. On the *Experiments* page, from the *Project* drop-down list, select the project that contains the pipeline experiment for the archived pipeline runs that you want to view.
+. From the list of pipeline experiments, click the experiment that contains the archived pipeline runs that you want to view.
+. On the *Runs* page, click the *Archive* tab.
+
+.Verification
+* A list of archived runs is displayed on the *Archive* tab on the *Runs* page for the pipeline experiment.
+
+//[role='_additional-resources']
+//.Additional resources

@@ -1,0 +1,53 @@
+:_module-type: PROCEDURE
+
+[id='deploying-a-model-version-from-a-model-registry_{context}']
+= Deploying a model version from a model registry 
+
+[role='_abstract']
+You can deploy a version of a registered model directly from a model registry.
+
+.Prerequisites
+* An available model registry exists in your deployment, and contains at least 1 registered model.
+ifdef::upstream[]
+* To deploy a model version by using the single-model serving platform, you have fulfilled the prerequisites described in link:{odhdocshome}/deploying-models/#deploying-models-on-the-single-model-serving-platform_odh-admin[Deploying models on the single-model serving platform].
+* To deploy a model version by using the multi-model serving platform, you have fulfilled the prerequisites described in link:{odhdocshome}/deploying-models/#deploying-a-model-using-the-multi-model-serving-platform_odh-admin[Deploying a model by using the multi-model serving platform].
+endif::[]
+ifndef::upstream[]
+* To deploy a model version by using the single-model serving platform, you have fulfilled the prerequisites described in link:{rhoaidocshome}{default-format-url}/deploying_models/deploying_models_on_the_single_model_serving_platform#deploying-models-on-the-single-model-serving-platform_rhoai-user[Deploying models on the single-model serving platform].
+* To deploy a model version by using the multi-model serving platform, you have fulfilled the prerequisites described in link:{rhoaidocshome}{default-format-url}/deploying_models/deploying_models_on_the_multi_model_serving_platform#deploying-a-model-using-the-multi-model-serving-platform_rhoai-user[Deploying a model by using the multi-model serving platform].
+endif::[]
+
+.Procedure
+. From the {productname-short} dashboard, click *Models* -> *Model registry*.
+. From the *Model registry* drop-down list, select the model registry from which you want to deploy a model version.
+. In the *Model name* column, click the name of the model that contains the version that you want to deploy.
++
+The details page for the model version opens.
+. Click the action menu (*&#8942;*) beside the model version that you want to deploy.
+. Click *Deploy*.
+. In the *Deploy model* dialog, configure properties for deploying the model.
+.. From the *Project* drop-down list, select a target project.
+.. Click *Deploy*.
+. Configure the following properties for deploying your model:
+.. From the *Project* drop-down list, select a project in which to deploy your model.
+.. Optional: In the *Model deployment name* field, enter a unique name for your model deployment. This field is autofilled with a value that contains the model name by default. 
++
+This will be the name of the inference service that is created when the model is deployed.
+ifdef::upstream[]
+. Configure the remaining properties for deploying your model, as described in link:{odhdocshome}/deploying-models/#deploying-a-model-using-the-multi-model-serving-platform_odh-user[Deploying a model by using the multi-model serving platform] or link:{odhdocshome}/deploying-models/#deploying-models-on-the-single-model-serving-platform_odh-user[Deploying models on the single-model serving platform].
+endif::[]
+ifndef::upstream[]
+. Configure the remaining properties for deploying your model, as described in link:{rhoaidocshome}{default-format-url}/deploying_models/deploying-models_rhoai-user#deploying-a-model-using-the-multi-model-serving-platform_rhoai-user[Deploying a model by using the multi-model serving platform] or link:{rhoaidocshome}{default-format-url}/deploying_models/deploying_models_on_the_single_model_serving_platform#deploying-models-on-the-single-model-serving-platform_rhoai-user[Deploying models on the single-model serving platform].
+endif::[]
+.. Click *Deploy*.			 
+
+.Verification
+* The model deployment is displayed on the *Models* -> *Model Deployments* page.
+* The model deployment is displayed in the *Latest deployments* section of the model details page.
+* The model version is displayed on the *Deployments* tab for the model.
+* You can edit the model version deployment by clicking the action menu (*&#8942;*) beside it, and then clicking *Edit*.
+* You can delete the model version deployment by clicking the action menu (*&#8942;*) beside it, and then clicking *Delete*.
+
+// [role="_additional-resources"]
+// .Additional resources
+// * TODO or delete

@@ -1,0 +1,34 @@
+:_module-type: PROCEDURE
+
+[id="upgrading-the-odh-operator_{context}"]
+= Upgrading the Open Data Hub Operator
+
+.Prerequisites
+* You have installed the Open Data Hub Operator.
+* You are using OpenShift Container Platform {ocp-minimum-version} or later.
+* Your OpenShift cluster has a minimum of 16 CPUs and 32GB of memory across all OpenShift worker nodes.
+* You can log in as a user with `cluster-admin` privileges.
+
+.Procedure
+. Log in to the OpenShift Container Platform web console as a user with `cluster-admin` privileges.
+. Select *Operators* -> *Installed Operators*, and then click the *Open Data Hub Operator*.
+. Click the *Subscription* tab.
+. Under *Update channel*, click the pencil icon.
+. In the *Change Subscription update channel* dialog, select `fast`, and then click *Save*.
++
+If you configured the Open Data Hub Operator with automatic update approval, the upgrade begins. If you configured the Operator with manual update approval, perform the actions in the next step.
+. To approve a manual update, perform these actions:
+.. Next to *Upgrade status*, click *1 requires approval*.
+.. Click *Preview InstallPlan*.
+.. Review the manual install plan, and then click *Approve*.
+
+.Verification
+* Select *Operators* -> *Installed Operators* to verify that the *Open Data Hub Operator* is listed with the updated version number and *Succeeded* status.
+
+.Next Steps
+* Check the Open Data Hub components. For more information, see link:{odhdocshome}/upgrading-open-data-hub/#installing-odh-components_upgrade[Installing Open Data Hub components].
+* Access the Open Data Hub dashboard.
+
+[role="_additional-resources"]
+.Additional resources
+* link:{odhdocshome}/installing-open-data-hub/#configuring-the-operator-logger_install[Configuring the {productname-short} Operator logger]

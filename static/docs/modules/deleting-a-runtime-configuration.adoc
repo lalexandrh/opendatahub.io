@@ -1,0 +1,32 @@
+:_module-type: PROCEDURE
+
+[id="deleting-a-runtime-configuration_{context}"]
+= Deleting a runtime configuration
+
+[role='_abstract']
+After you have finished using your runtime configuration, you can delete it from the JupyterLab interface. After deleting a runtime configuration, you cannot run pipelines in JupyterLab until you create another runtime configuration.
+
+.Prerequisites
+* You have logged in to {productname-long}.
+* You have created a data science project that contains a workbench.
+* You have created and configured a pipeline server within the data science project that contains your workbench.
+* A previously created runtime configuration is visible in the JupyterLab interface.
+* You have created and launched a workbench from a workbench image that contains the Elyra extension (Standard Data Science, TensorFlow, TrustyAI, ROCm-PyTorch, ROCm-TensorFlow, or PyTorch).
++
+[IMPORTANT]
+====
+The Elyra pipeline editor is available in specific workbench images only. To use Elyra, the workbench must be based on a JupyterLab image. The Elyra extension is not available in code-server or RStudio IDEs. The workbench must also be derived from the Standard Data Science image. It is not available in Minimal Python or CUDA-based workbenches. All other supported JupyterLab-based workbench images have access to the Elyra extension.
+====
+
+.Procedure
+. In the left sidebar of JupyterLab, click *Runtimes* (image:images/jupyter-runtimes-sidebar.png[The Runtimes icon]).
+. Hover the cursor over the runtime configuration that you want to delete and click the *Delete Item* button (image:images/jupyterlab-trash-button.png[Delete item]).
++
+A dialog box opens prompting you to confirm the deletion of your runtime configuration.
+. Click *OK*.
+
+.Verification
+* The runtime configuration that you deleted is no longer shown on the *Runtimes* tab (image:images/jupyter-runtimes-sidebar.png[The Runtimes icon]) in the left sidebar of JupyterLab.
+
+//[role='_additional-resources']
+//.Additional resources//

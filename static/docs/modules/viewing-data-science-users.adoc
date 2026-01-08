@@ -1,0 +1,28 @@
+:_module-type: PROCEDURE
+
+[id='viewing-data-science-users_{context}']
+= Viewing {productname-short} users
+If you have defined {productname-short} user groups, you can view the users that belong to these groups.
+
+.Prerequisites
+* The {productname-long} user group, administrator group, or both exist.
+ifdef::cloud-service[]
+* You have the `cluster-admin` role or you are part of the `dedicated-admins` administrator group. The `dedicated-admins` group applies only to OpenShift Dedicated.
+* You have configured a supported identity provider for your OpenShift cluster.
+endif::[]
+ifdef::upstream,self-managed[]
+* You have the `cluster-admin` role in {openshift-platform}.
+* You have configured a supported identity provider for {openshift-platform}.
+endif::[]
+
+.Procedure
+. In the {openshift-platform} web console, click *User Management* -> *Groups*.
+. Click the name of the group containing the users that you want to view.
+** For administrative users, click the name of your administrator group. for example, {admin-group}.
+** For normal users, click the name of your user group, for example, {user-group}.
++
+The *Group details* page for the group is displayed.
+
+.Verification
+* In the *Users* section for the relevant group, you can view the users who have permission to access {productname-long}.
+

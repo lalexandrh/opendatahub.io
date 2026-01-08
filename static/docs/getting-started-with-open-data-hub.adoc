@@ -1,0 +1,34 @@
+---
+layout: docs
+title: Getting started with Open Data Hub
+permalink: /docs/getting-started-with-open-data-hub
+custom_css: asciidoc.css
+---
+
+:upstream:
+include::_artifacts/document-attributes-global.adoc[]
+
+:doctype: book
+:toc: left
+:compat-mode:
+:context: get-started
+
+= Getting started with Open Data Hub
+
+include::modules/overview-for-getting-started.adoc[leveloffset=+1]
+
+include::modules/glossary-of-common-terms.adoc[leveloffset=+2]
+
+include::modules/logging-in.adoc[leveloffset=+1]
+
+include::modules/viewing-installed-components.adoc[leveloffset=+2]
+
+include::modules/creating-a-data-science-project.adoc[leveloffset=+1]
+
+include::modules/creating-a-workbench-select-ide.adoc[leveloffset=+1]
+
+include::modules/about-workbench-images.adoc[leveloffset=+2]
+
+include::modules/creating-a-project-workbench.adoc[leveloffset=+2]
+
+include::modules/next-steps-getting-started.adoc[leveloffset=+1]

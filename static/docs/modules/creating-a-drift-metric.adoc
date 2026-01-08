@@ -1,0 +1,20 @@
+:_module-type: CONCEPT
+
+[id='creating-a-drift-metric_{context}']
+= Creating a drift metric
+
+[role='_abstract']
+To monitor a deployed model for data drift, you must first create drift metrics. 
+
+ifndef::upstream[]
+For information about the specific data drift metrics, see link:{rhoaidocshome}{default-format-url}/monitoring_data_science_models/monitoring-data-drift_drift-monitoring#using-drift-metrics_drift-monitoring[Using drift metrics].
+endif::[]
+ifdef::upstream[]
+For information about the specific data drift metrics, see link:{odhdocshome}/monitoring-data-science-models/#using-drift-metrics_drift-monitoring[Using drift metrics]. 
+endif::[]
+
+For the complete list of TrustyAI metrics, see link:https://trustyai.org/docs/main/trustyai-service-api-reference.html[TrustyAI service API].
+
+//You can create a data drift metric for a model by using the {productname-short} dashboard or by using the {openshift-cli}.
+
+include::creating-a-drift-metric-using-cli.adoc[leveloffset=+1]

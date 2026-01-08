@@ -1,0 +1,41 @@
+:_module-type: PROCEDURE
+
+[id='duplicating-a-bias-metric_{context}']
+= Duplicating a bias metric
+
+[role='_abstract']
+If you want to edit an existing metric, you can duplicate (copy) it in the {productname-short} interface and then edit the values in the copy. However, note that the history of the original metric is not applied to the copy.
+
+.Prerequisites
+ifndef::upstream[]
+* You are familiar with link:{rhoaidocshome}{default-format-url}/monitoring_data_science_models/monitoring-model-bias_bias-monitoring#using-bias-metrics_bias-monitoring[the bias metrics that you can use with {productname-short}] and how to interpret them.
+endif::[]
+ifdef::upstream[]
+* You are familiar with link:{odhdocshome}/monitoring-data-science-models/#using-bias-metrics_bias-monitoring[the bias metrics that you can use with {productname-short}] and how to interpret them.
+endif::[]
+
+* You are familiar with the specific data set schema and understand the names and meanings of the inputs and outputs.
+
+* There is an existing bias metric that you want to duplicate.
+
+.Procedure
+. In the left menu of the {productname-short} dashboard, click *Models* -> *Model deployments*.
+. On the *Model deployments* page, click the name of the model with the bias metric that you want to duplicate.
+. On the metrics page for the model, click the *Model bias* tab.
+. Click *Configure*.
+. On the *Bias metric configuration* page, click the action menu (&#8942;) next to the metric that you want to copy and then click *Duplicate*.
+. In the *Configure bias metric* dialog, follow these steps:
+.. In the *Metric name* field, type a unique name for your bias metric. Note that you cannot change the name of this metric later.
+ifndef::upstream[]
+.. Change the values of the fields as needed. For a description of these fields, see link:{rhoaidocshome}{default-format-url}/monitoring_data_science_models/monitoring-model-bias_bias-monitoring#creating-a-bias-metric-using-dashboard_bias-monitoring[Creating a bias metric by using the dashboard].
+endif::[]
+ifdef::upstream[]
+.. Change the values of the fields as needed. For a description of these fields, see link:{odhdocshome}/monitoring-data-science-models/#creating-a-bias-metric-using-dashboard_bias-monitoring[Creating a bias metric by using the dashboard].
+endif::[]
+.  Ensure that the values you entered are correct, and then click *Configure*.
+
+.Verification
+* The *Bias metric configuration* page shows the bias metrics that you configured for your model.
+
+.Next step
+To view metrics, on the *Bias metric configuration* page, click *View metrics* in the upper-right corner. 

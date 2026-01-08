@@ -1,0 +1,41 @@
+---
+layout: docs
+title: Managing Resources
+permalink: /docs/managing-resources
+custom_css: asciidoc.css
+---
+//:self-managed:
+:upstream:
+include::_artifacts/document-attributes-global.adoc[]
+
+
+:doctype: book
+:toc: left
+:compat-mode:
+:context: managing-resources
+
+= Managing resources
+
+As an {productname-short} administrator, you can manage the following resources:
+
+* {productname-short} admin and user groups
+* Dashboard customization
+* Custom workbench images
+* Cluster PVC size
+* Connection types
+* Cluster storage classes
+* Basic workbenches
+
+include::modules/selecting-admin-and-user-groups.adoc[leveloffset=+1]
+
+include::assemblies/customizing-the-dashboard.adoc[leveloffset=+1]
+
+include::modules/importing-a-custom-workbench-image.adoc[leveloffset=+1]
+
+include::assemblies/managing-cluster-pvc-size.adoc[leveloffset=+1]
+
+include::assemblies/managing-connection-types.adoc[leveloffset=+1]
+
+include::assemblies/managing-storage-classes.adoc[leveloffset=+1]
+
+include::assemblies/managing-basic-workbenches.adoc[leveloffset=+1]

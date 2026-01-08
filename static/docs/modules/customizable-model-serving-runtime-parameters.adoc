@@ -1,0 +1,41 @@
+
+:_module-type: REFERENCE
+
+[id='customizable-model-serving-runtime-parameters_{context}']
+= Customizable model serving runtime parameters
+
+[role='_abstract']
+You can modify the parameters of an existing model serving runtime to suit your deployment needs.
+
+For more information about parameters for each of the supported serving runtimes, see the following table:
+
+|===
+| Serving runtime | Resource 
+
+| Caikit Text Generation Inference Server (Caikit-TGIS) ServingRuntime for KServe | 
+link:https://github.com/opendatahub-io/caikit-nlp?tab=readme-ov-file#configuration[Caikit NLP: Configuration] +
+link:https://github.com/IBM/text-generation-inference?tab=readme-ov-file#model-configuration[TGIS: Model configuration]
+| Caikit Standalone ServingRuntime for KServe | link:https://github.com/opendatahub-io/caikit-nlp?tab=readme-ov-file#configuration[Caikit NLP: Configuration]
+| NVIDIA Triton Inference Server | link:https://docs.nvidia.com/deeplearning/triton-inference-server/user-guide/docs/tensorrtllm_backend/docs/model_config.html?#model-configuration[NVIDIA Triton Inference Server: Model Parameters]
+|OpenVINO Model Server | link:https://docs.openvino.ai/2024/openvino-workflow/model-server/ovms_docs_dynamic_input.html[OpenVINO Model Server Features: Dynamic Input Parameters]
+| Seldon MLServer | link:https://mlserver.readthedocs.io/en/stable/reference/model-settings.html[MLServer Documentation: Model Settings] 
+|[Deprecated] Text Generation Inference Server (TGIS) Standalone ServingRuntime for KServe	| link:https://github.com/IBM/text-generation-inference?tab=readme-ov-file#model-configuration[TGIS: Model configuration]
+|vLLM NVIDIA GPU ServingRuntime for KServe | link:https://docs.vllm.ai/en/stable/serving/engine_args.html[vLLM: Engine Arguments] +
+link:https://docs.vllm.ai/en/stable/serving/openai_compatible_server.html[OpenAI-Compatible Server] 
+|vLLM AMD GPU ServingRuntime for KServe | link:https://docs.vllm.ai/en/stable/serving/engine_args.html[vLLM: Engine Arguments] +
+link:https://docs.vllm.ai/en/stable/serving/openai_compatible_server.html[OpenAI-Compatible Server] 
+|vLLM Intel Gaudi Accelerator ServingRuntime for KServe | link:https://docs.vllm.ai/en/stable/serving/engine_args.html[vLLM: Engine Arguments] +
+link:https://docs.vllm.ai/en/stable/serving/openai_compatible_server.html[OpenAI-Compatible Server] 
+|=== 
+
+[role='_additional-resources']
+.Additional resources
+ifdef::upstream[]
+* link:{odhdocshome}/configuring-your-model-serving-platform/#customizing-parameters-serving-runtime_odh-admin[Customizing the parameters of a deployed model serving runtime]
+endif::[]
+
+ifndef::upstream[]
+* link:{rhoaidocshome}{default-format-url}/configuring_your_model-serving_platform/customizing_model_deployments#customizing-parameters-serving-runtime_rhoai-admin[Customizing the parameters of a deployed model serving runtime]
+endif::[]
+
+

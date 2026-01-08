@@ -1,0 +1,55 @@
+:_module-type: CONCEPT
+
+[id='overview-of-feature-store_{context}']
+=  Overview of Feature Store
+
+Feature Store is an {productname-short} component that provides an interface between models and data. It is based on the link:https://feast.dev/[Feast] open source project. Feature Store provides a framework for storing, managing, and serving features to machine learning models by using your existing infrastructure and data stores. It facilitates the retrieval of feature data from different data sources to generate and manage features by providing unified feature management capabilities.
+
+The following figure shows where Feature Store fits in the ML workflow. In an ML workflow, features are inputs to ML models. The ML workflow starts with many types of relevant data, such as transactional data, customer references, and product data. The data comes from a variety of databases and data sources. From this data, ML engineers use Feature Store to curate features. The features are input to models and the models can then use the data from the features to make predictions.
+
+.Feature Store in the ML workflow
+image::images/557_OpenShiftAI_feature_store_workflow_0525.png[In the ML workflow, Feature Store fits between the data and features]
+
+Feature Store is a machine learning data system that provides the following capabilities:
+
+* Runs data pipelines that transform raw data into feature values
+* Stores and manages feature data
+* Serves feature data consistently for training and inference purposes
+* Manages features consistently across offline and online environments
+* Powers one model or thousands simultaneously with fresh, reusable features, on demand
+
+Feature Store is a centralized hub for storing, processing, and accessing commonly-used features that enables users in your ML organization to collaborate. When you register a feature in a Feature Store, it becomes available for immediate reuse by other models across your organization. The Feature Store registry reduces duplication of data engineering efforts and allows new ML projects to bootstrap with a library of curated, production-ready features.
+
+Feature Store provides consistency in model training and inference, promotes collaboration and usability across multiple projects, monitors lineage and versioning of models for data drifts, leaks, and training skews, and seamlessly integrates with other MLOps tools. Feature Store remotely manages data stored in other systems, such as BigQuery, Snowflake, DynamoDB, and Redis, to make features consistently available at training / serving time.
+
+Feature Store performs the following tasks: 
+
+* Stores features in offline and online stores
+* Registers features in the registry for sharing 
+* Serves features to ML models
+
+ML platform teams use Feature Store to store and serve features consistently for offline training, such as batch-scoring, and online real-time model inference.
+
+Feature Store consists of the following key components:
+
+Registry:: A central catalog of all feature definitions and their related metadata. It allows ML engineers and data scientists to search, discover, and collaborate on new features. The registry exposes methods to apply, list, retrieve, and delete features.
+
+Offline Store:: The data store that contains historical data for scale-out batch scoring or model training. The offline store persists batch data that has been ingested into Feature Store. This data is used for producing training datasets. Examples of offline stores include Dask, Snowflake, BigQuery, Redshift, and DuckDB.
+
+Online Store:: The data store that is used for low-latency feature retrieval. The online store is used for real-time inference. Examples of online stores include Redis, GCP Datastore, and DynamoDB.
+
+Server:: A feature server that serves pre-computed features online. There are three Feature Store servers:
+
+* *The online feature server* - A Python feature server that is an HTTP endpoint that serves features with JSON I/O. You can write and read features from the online store using any programming language that can make HTTP requests.
+* *The offline feature server* - An Apache Arrow Flight Server that uses the gRPC communication protocol to exchange data. This server wraps calls to existing offline store implementations and exposes interfaces as Arrow Flight endpoints.
+* *The registry server* - A server that uses the gRPC communication protocol to exchange data. You can communicate with the server using any programming language that can make gRPC requests.
+
+UI:: A web-based graphical user interface (UI) for viewing all the Feature Store objects and their relationships with each other.
+
+Feature Store provides the following software capabilities:
+
+* A Python SDK for programmatically defining features and data sources
+* A Python SDK for reading and writing features to offline and online data stores
+* An optional feature server for reading and writing features (useful for non-python languages) by using APIs
+* A web-based UI for viewing and exploring information about features defined in the project
+* A command line interface (CLI) for viewing and updating feature information

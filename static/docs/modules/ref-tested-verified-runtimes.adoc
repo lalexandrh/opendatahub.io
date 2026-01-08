@@ -1,0 +1,32 @@
+:_module-type: REFERENCE
+
+[id='tested-verified-runtimes_{context}']
+= Tested and verified model-serving runtimes
+
+[role='_abstract']
+
+Tested and verified runtimes are community versions of model-serving runtimes that have been tested and verified against specific versions of {productname-short}. 
+
+{org-name} tests the current version of a tested and verified runtime each time there is a new version of {productname-short}. If a new version of a tested and verified runtime is released in the middle of an {productname-short} release cycle, it will be tested and verified in an upcoming release.
+
+See link:https://access.redhat.com/articles/rhoai-supported-configs[Supported configurations] for a list of tested and verified runtimes in {productname-short}.
+
+[NOTE]
+--
+Tested and verified runtimes are not directly supported by {org-name}. You are responsible for ensuring that you are licensed to use any tested and verified runtimes that you add, and for correctly configuring and maintaining them.
+--
+
+ifndef::upstream[]
+For more information, see link:https://access.redhat.com/articles/7089743[Tested and verified runtimes in {productname-short}].
+endif::[]
+
+
+.Additional resources
+ifdef::upstream[]
+* link:{odhdocshome}/deploying-models/#inference-endpoints_odh-user[Inference endpoints]
+endif::[]
+
+ifndef::upstream[]
+* link:{rhoaidocshome}{default-format-url}/deploying_models/making_inference_requests_to_deployed_models#inference-endpoints_rhoai-user[Inference endpoints]
+endif::[]
+

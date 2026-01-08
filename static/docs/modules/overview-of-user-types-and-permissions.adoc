@@ -1,0 +1,74 @@
+:_module-type: CONCEPT
+
+[id='overview-of-user-types-and-permissions_{context}']
+= Overview of user types and permissions
+
+Table 1 describes the {productname-long} user types.
+
+.User types
+[cols="1,5"]
+|===
+| User Type | Permissions
+
+| Users
+| Machine learning operations (MLOps) engineers and data scientists can access and use individual components of {productname-long}, such as workbenches and data science pipelines.
+ifndef::upstream[]
+See also link:{rhoaidocshome}{default-format-url}/installing_and_uninstalling_{url-productname-short}/accessing-the-dashboard_install[Accessing the {productname-short} dashboard].
+endif::[]
+
+| Administrators
+a| In addition to the actions permitted to users, administrators can perform these actions:
+
+* Configure {productname-long} settings.
+* Access and manage workbenches.
+* Access and manage data science pipeline applications for any data science project.
+|===
+
+By default, all OpenShift users have access to {productname-long}. In addition, users in the OpenShift administrator group (`cluster admins`), automatically have administrator access in {productname-short}.
+
+Optionally, if you want to restrict access to your {productname-short} deployment to specific users or groups, you can create user groups for users and administrators.
+
+ifdef::cloud-service[]
+
+If you decide to restrict access, and you already have user groups defined in your configured identity provider, you can add these user groups to your {productname-short} deployment. If you decide to use  user groups without adding these groups from an identity provider, you must create the groups in OpenShift and then add users to them.
+
+There are some operations relevant to {productname-short} that require the `cluster-admin` role. Those operations include:
+
+* Adding users to the {productname-short} user and administrator groups.
+* Removing users from the {productname-short} user and administrator groups.
+* Managing custom environment and storage configuration for users in OpenShift, such as Jupyter notebook resources, ConfigMaps, and persistent volume claims (PVCs).
+* Managing data science pipeline servers and pipeline applications from the {productname-short} dashboard, or from the command-line interface (CLI), for any data science project. 
+
+[IMPORTANT]
+====
+Although users of {productname-short} and its components are authenticated through OpenShift, session management is separate from authentication. This means that logging out of OpenShift or {productname-short} does not affect a logged in Jupyter session running on those platforms. This means that when a user's permissions change, that user must log out of all current sessions in order for the changes to take effect.
+====
+endif::[]
+
+ifdef::upstream,self-managed[]
+If you decide to restrict access, and you already have groups defined in your configured identity provider, you can add these groups to your {productname-short} deployment. If you decide to use groups without adding these groups from an identity provider, you must create the groups in {openshift-platform} and then add users to them.
+
+There are some operations relevant to {productname-short} that require the `cluster-admin` role. Those operations include:
+
+* Adding users to the {productname-short} user and administrator groups, if you are using groups.
+* Removing users from the {productname-short} user and administrator groups, if you are using groups.
+* Managing custom environment and storage configuration for users in {openshift-platform}, such as Jupyter notebook resources, ConfigMaps, and persistent volume claims (PVCs).
+
+[IMPORTANT]
+====
+Although users of {productname-short} and its components are authenticated through OpenShift, session management is separate from authentication.
+This means that logging out of {openshift-platform} or {productname-short} does not affect a logged in Jupyter session running on those platforms.
+This means that when a user's permissions change, that user must log out of all current sessions in order for the changes to take effect.
+====
+endif::[]
+
+
+.Additional resources
+
+ifdef::cloud-service[]
+See also link:https://docs.redhat.com/en/documentation/openshift_dedicated/{osd-latest-version}/html/cluster_administration/index[OpenShift Dedicated cluster administration] or link:https://docs.redhat.com/en/documentation/red_hat_openshift_service_on_aws_classic_architecture/{rosa-classic-latest-version}/html/cluster_administration/index[{rosa-classic-productname} cluster administration].
+endif::[]
+
+ifdef::self-managed[]
+See also link:https://docs.redhat.com/en/documentation/openshift_container_platform/{ocp-latest-version}/html/authentication_and_authorization/index[OpenShift Container Platform Authentication and authorization].
+endif::[]

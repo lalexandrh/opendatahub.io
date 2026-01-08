@@ -1,0 +1,28 @@
+:_module-type: PROCEDURE
+
+[id="viewing-scheduled-pipeline-runs_{context}"]
+= Viewing scheduled pipeline runs
+
+[role='_abstract']
+You can view a list of pipeline runs that are scheduled for execution in a pipeline experiment. From this list, you can view details relating to your pipeline runs, such as the pipeline version that the run belongs to. You can also view the run status, execution frequency, and schedule.
+
+.Prerequisites
+* You have logged in to {productname-long}.
+* You have previously created a data science project that is available and contains a pipeline server.
+* You have imported a pipeline to an active pipeline server.
+* You have scheduled a pipeline run that is available to view.
+
+.Procedure
+. From the {productname-short} dashboard, click *Experiments* -> *Experiments and runs*.
+. On the *Experiments* page, from the *Project* drop-down list, select the project that contains the pipeline experiment for the scheduled pipeline runs that you want to view.
+. From the list of pipeline experiments, click the experiment that contains the pipeline runs that you want to view.
+. On the *Runs* page, click the *Schedules* tab.
++
+After a run is scheduled, the *Status* column indicates whether the run is ready or unavailable for execution. To change its execution availability, set the *Status* switch to *On* or *Off*. Alternatively, you can change its execution availability from the details page for the scheduled run by clicking the *Actions* drop-down menu, and then selecting *Enable* or *Disable*.
+ 
+
+.Verification
+* A list of scheduled runs is displayed on the *Schedules* tab on the *Runs* page for the pipeline experiment.
+
+//[role='_additional-resources']
+//.Additional resources

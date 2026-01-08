@@ -1,0 +1,202 @@
+:_module-type: REFERENCE
+
+[id='ref-example-kueue-resource-configurations_{context}']
+= Example Kueue resource configurations for distributed workloads
+
+[role='_abstract']
+You can use these example configurations as a starting point for creating Kueue resources to manage your distributed training workloads. 
+
+These examples show how to configure Kueue resource flavors and cluster queues for common distributed training scenarios.
+
+
+ifndef::upstream[]
+ifdef::self-managed[]
+[NOTE]
+====
+In {productname-short} {vernum}, {org-name} does not support shared cohorts.
+====
+endif::[]
+ifdef::cloud-service[]
+[NOTE]
+====
+In {productname-short}, {org-name} does not support shared cohorts.
+====
+endif::[]
+endif::[]
+
+
+== NVIDIA GPUs without shared cohort
+
+=== NVIDIA RTX A400 GPU resource flavor
+
+[source,bash]
+----
+apiVersion: kueue.x-k8s.io/v1beta1
+kind: ResourceFlavor
+metadata:
+  name: "a400node"
+spec:
+  nodeLabels:
+    instance-type: nvidia-a400-node
+  tolerations:
+  - key: "HasGPU"
+    operator: "Exists"
+    effect: "NoSchedule"
+----
+
+=== NVIDIA RTX A1000 GPU resource flavor
+
+[source,bash]
+----
+apiVersion: kueue.x-k8s.io/v1beta1
+kind: ResourceFlavor
+metadata:
+  name: "a1000node"
+spec:
+  nodeLabels:
+    instance-type: nvidia-a1000-node
+  tolerations:
+  - key: "HasGPU"
+    operator: "Exists"
+    effect: "NoSchedule"
+----
+
+=== NVIDIA RTX A400 GPU cluster queue
+
+[source,bash]
+----
+apiVersion: kueue.x-k8s.io/v1beta1
+kind: ClusterQueue
+metadata:
+  name: "a400queue"
+spec:
+  namespaceSelector: {} # match all.
+  resourceGroups:
+  - coveredResources: ["cpu", "memory", "nvidia.com/gpu"]
+    flavors:
+    - name: "a400node"
+      resources:
+      - name: "cpu"
+        nominalQuota: 16
+      - name: "memory"
+        nominalQuota: 64Gi
+      - name: "nvidia.com/gpu"
+        nominalQuota: 2
+----
+
+=== NVIDIA RTX A1000 GPU cluster queue
+
+[source,bash]
+----
+apiVersion: kueue.x-k8s.io/v1beta1
+kind: ClusterQueue
+metadata:
+  name: "a1000queue"
+spec:
+  namespaceSelector: {} # match all.
+  resourceGroups:
+  - coveredResources: ["cpu", "memory", "nvidia.com/gpu"]
+    flavors:
+    - name: "a1000node"
+      resources:
+      - name: "cpu"
+        nominalQuota: 16
+      - name: "memory"
+        nominalQuota: 64Gi
+      - name: "nvidia.com/gpu"
+        nominalQuota: 2
+----
+
+== NVIDIA GPUs and AMD GPUs without shared cohort
+
+=== AMD GPU resource flavor
+
+[source,bash]
+----
+apiVersion: kueue.x-k8s.io/v1beta1
+kind: ResourceFlavor
+metadata:
+  name: "amd-node"
+spec:
+  nodeLabels:
+    instance-type: amd-node
+  tolerations:
+  - key: "HasGPU"
+    operator: "Exists"
+    effect: "NoSchedule"
+----
+
+
+
+=== NVIDIA GPU resource flavor
+
+[source,bash]
+----
+apiVersion: kueue.x-k8s.io/v1beta1
+kind: ResourceFlavor
+metadata:
+  name: "nvidia-node"
+spec:
+  nodeLabels:
+    instance-type: nvidia-node
+  tolerations:
+  - key: "HasGPU"
+    operator: "Exists"
+    effect: "NoSchedule"
+----
+
+
+
+=== AMD GPU cluster queue
+
+[source,bash]
+----
+apiVersion: kueue.x-k8s.io/v1beta1
+kind: ClusterQueue
+metadata:
+  name: "team-a-amd-queue"
+spec:
+  namespaceSelector: {} # match all.
+  resourceGroups:
+  - coveredResources: ["cpu", "memory", "amd.com/gpu"]
+    flavors:
+    - name: "amd-node"
+      resources:
+      - name: "cpu"
+        nominalQuota: 16
+      - name: "memory"
+        nominalQuota: 64Gi
+      - name: "amd.com/gpu"
+        nominalQuota: 2
+----
+
+
+
+=== NVIDIA GPU cluster queue
+
+[source,bash]
+----
+apiVersion: kueue.x-k8s.io/v1beta1
+kind: ClusterQueue
+metadata:
+  name: "team-a-nvidia-queue"
+spec:
+  namespaceSelector: {} # match all.
+  resourceGroups:
+  - coveredResources: ["cpu", "memory", "nvidia.com/gpu"]
+    flavors:
+    - name: "nvidia-node"
+      resources:
+      - name: "cpu"
+        nominalQuota: 16
+      - name: "memory"
+        nominalQuota: 64Gi
+      - name: "nvidia.com/gpu"
+        nominalQuota: 2
+----
+
+[role='_additional-resources']
+.Additional resources
+* link:{rhbok-docs}[{rhbok-productname} documentation]
+* link:https://kueue.sigs.k8s.io/docs/concepts/resource_flavor/[Resource Flavor] in the Kueue documentation
+* link:https://kueue.sigs.k8s.io/docs/concepts/cluster_queue/[Cluster Queue] in the Kueue documentation

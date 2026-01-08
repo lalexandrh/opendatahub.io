@@ -1,0 +1,141 @@
+:_module-type: REFERENCE
+
+[id="requirements-for-upgrading-odh-v2_{context}"]
+= Requirements for upgrading {productname-short} version 2
+
+[role="_abstract"]
+When upgrading {productname-short} version 2.0 or 2.1 to version 2.2 or later, you must complete the following tasks.
+
+*Check the components in the `DataScienceCluster` object*
+
+When you upgrade to version {vernum}, the upgrade process automatically uses the values from the `DataScienceCluster` object in the previous version.
+
+After the upgrade, you should inspect the {vernum} `DataScienceCluster` object and optionally update the status of any components as described in link:{odhdocshome}/upgrading-open-data-hub/#installing-odh-components_upgrade[Installing Open Data Hub components].
+
+[NOTE]
+====
+New components are not automatically added to the `DataScienceCluster` object during upgrade. If you want to use a new component, you must manually edit the `DataScienceCluster` object to add the component entry.
+====
+
+Note that Open Data Hub Operator versions 2.2 and later use an upgraded API version for a DataScienceCluster instance, resulting in the following differences.
+
+.DataScienceCluster instance differences
+|===
+| | ODH 2.1 and earlier | ODH 2.2 and later
+
+|API version
+|`v1alpha1`
+|`v1`
+
+|Enable component
+|`.spec.components.[component_name].enabled: true`
+|`.spec.components.[component_name].managementState: Managed`
+
+|Disable component
+|`.spec.components.[component_name].enabled: false`
+|`.spec.components.[component_name].managementState: Removed`
+|===
+
+*Migrate from embedded Kueue to {rhbok-productname}*
+
+The embedded Kueue component for managing distributed workloads is deprecated. {productname-short} now uses the {rhbok-productname} Operator to provide enhanced workload scheduling for distributed training, workbench, and model serving workloads.
+
+Before upgrading {productname-short}, check if your environment is using the embedded Kueue component by verifying the `spec.components.kueue.managementState` field in the `DataScienceCluster` custom resource. If the field is set to `Managed`, you must complete the migration to the {rhbok-productname} Operator to avoid controller conflicts and ensure continued support for queue-based workloads.
+
+This migration requires {openshift-platform} 4.18 or later. For more information, see link:{odhdocshome}/managing-odh/#migrating-to-the-rhbok-operator_kueue[Migrating to the {rhbok-productname} Operator].
+
+*Update workflows interacting with `OdhDashboardConfig` resource*
+
+Previously, cluster administrators used the `groupsConfig` option in the `OdhDashboardConfig` resource to manage the {openshift-platform} groups (both administrators and non-administrators) that can access the {productname-short} dashboard. Starting with {productname-short} 2.17, this functionality has moved to the `Auth` resource. If you have workflows (such as GitOps workflows) that interact with `OdhDashboardConfig`, you must update them to reference the `Auth` resource instead.
+
+.User management resource update
+[cols="1,2,3"]
+|===
+| | ODH 2.16 and earlier | ODH 2.17 and later
+
+|`apiVersion`
+|`opendatahub.io/v1alpha`
+|`services.platform.opendatahub.io/v1alpha1`
+
+|`kind`
+|`OdhDashboardConfig`
+|`Auth`
+
+|`name`
+|`odh-dashboard-config`
+|`auth`
+
+|Admin groups
+|`spec.groupsConfig.adminGroups`
+|`spec.adminGroups`
+
+|User groups
+|`spec.groupsConfig.allowedGroups`
+|`spec.allowedGroups`
+
+|===
+
+
+////
+*Update embedded Kueue*
+
+If you have not yet migrated to the {rhbok-productname} Operator, you must update the embedded Kueue component.  
+
+In {productname-short}, cluster administrators use Kueue to configure quota management for distributed workloads.
+
+When upgrading from {productname-short} v2.23.1 or earlier, the version of the MultiKueue Custom Resource Definitions (CRDs) changes from `v1alpha1` to `v1beta1`.
+
+However, if the `kueue` component is set to `Managed`, the {productname-long} Operator does not automatically remove the `v1alpha1` MultiKueue CRDs during the upgrade.
+The deployment of the Kueue component then becomes blocked, as indicated in the `default-dsc` `DataScienceCluster` custom resource, where the value of the `kueueReady` condition remains set to `False`.
+
+You can resolve this problem as follows:
+
+[NOTE]
+====
+If you created any resources based on the MultiKueue CRDs, those resources will be deleted when you delete the CRDs.
+If you do not want to lose your data, create a backup before deleting the CRDs.
+====
+
+. Log in to the OpenShift Console.
+. In the *Administrator* perspective, click *Administration -> CustomResourceDefinitions*.
+. In the search field, enter `multik`.
+. Update the *MultiKueueCluster* CRD as follows:
+.. Click the CRD name, and click the *YAML* tab.
+.. Ensure that the `metadata:labels` section includes the following entry:
++
+[source]
+---- 
+app.opendatahub.io/kueue: 'true'
+----
+.. Click *Save*.
+. Repeat the above steps to update the *MultiKueueConfig* CRD.
+. Remove the *MultiKueueCluster* and *MultiKueueConfig* CRDs, by completing the following steps for each CRD:
+.. Click the *Actions* menu.
+.. Click *Delete CustomResourceDefinition*.
+.. Click *Delete* to confirm the deletion.
+
+The {productname-long} Operator starts the Kueue Controller, and Kueue then automatically creates the `v1beta1` MultiKueue CRDs.
+In the `default-dsc` `DataScienceCluster` custom resource, the `kueueReady` condition changes to `True`. 
+For information about how to check that the *kueue-controller-manager-_<pod-id>_* pod is *Running*, see link:{odhdocshome}/installing-open-data-hub/#installing-the-distributed-workloads-components_install[Installing the distributed workloads components].
+////
+
+*Verify Argo Workflows compatibility*
+
+If you use your own Argo Workflows instance for pipelines, verify that the installed version is compatible with this release of {productname-short}. For details, see link:https://access.redhat.com/articles/rhoai-supported-configs[Supported Configurations].
+
+*Check the status of certificate management*
+
+You can use self-signed certificates in {productname-short}.
+
+ifdef::upstream[]
+After you upgrade, check the management status for Certificate Authority (CA) bundles as described in link:{odhdocshome}/installing-open-data-hub/#understanding-certificates_certs[Understanding how {productname-short} handles certificates].
+endif::[]
+
+ifndef::upstream[]
+ifdef::disconnected[]
+After you upgrade, check the management status for Certificate Authority (CA) bundles as described in link:{rhoaidocshome}{default-format-url}/installing_and_uninstalling_{url-productname-short}/working-with-certificates_certs[Working with certificates].
+endif::[]
+ifndef::disconnected[]
+After you upgrade, check the management status for Certificate Authority (CA) bundles as described in link:{rhoaidocshome}{default-format-url}/installing_and_uninstalling_{url-productname-short}/working-with-certificates_certs[Working with certificates].
+endif::[]
+endif::[]

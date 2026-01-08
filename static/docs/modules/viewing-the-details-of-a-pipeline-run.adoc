@@ -1,0 +1,26 @@
+:_module-type: PROCEDURE
+
+[id="viewing-the-details-of-a-pipeline-run_{context}"]
+= Viewing the details of a pipeline run
+
+[role='_abstract']
+To gain a clearer understanding of your pipeline runs, you can view the details of a previously triggered pipeline run, such as its graph, execution details, and run output.
+
+.Prerequisites
+* You have logged in to {productname-long}.
+* You have previously created a data science project that is available and contains a pipeline server.
+* You have imported a pipeline to an active pipeline server.
+* You have previously triggered a pipeline run.
+
+.Procedure
+. From the {productname-short} dashboard, click *Data science pipelines* -> *Runs*.
+. On the *Runs* page, from the *Project* drop-down list, select the project that you want to view the details of a pipeline run for.
+. On the *Runs* page, click the name of the run that you want to view the details of.
++
+The details page for the run opens.
+
+.Verification
+* On the run details page, you can view the run graph, execution details, input parameters, step logs, and run output.
+
+//[role='_additional-resources']
+//.Additional resources

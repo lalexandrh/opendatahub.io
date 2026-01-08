@@ -1,0 +1,22 @@
+:_module-type: PROCEDURE
+
+[id="viewing-the-details-of-a-pipeline-server_{context}"]
+= Viewing the details of a pipeline server
+
+[role='_abstract']
+You can view the details of pipeline servers configured in {productname-short}, such as the pipeline's connection details and where its data is stored.
+
+.Prerequisites
+* You have logged in to {productname-long}.
+* You have previously created a data science project that contains an active and available pipeline server.
+
+.Procedure
+. From the {productname-short} dashboard, click *Data science pipelines* -> *Pipelines*.
+. On the *Pipelines* page, from the *Project* drop-down list, select the project that contains the pipeline server that you want to view.
+. From the *Pipeline server actions* list, select *Manage pipeline server configuration*.
+
+.Verification
+* You can view the pipeline server details in the *Manage pipeline server* dialog.
+
+//[role='_additional-resources']
+//.Additional resources

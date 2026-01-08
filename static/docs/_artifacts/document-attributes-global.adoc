@@ -1,0 +1,98 @@
+// For copyright
+:YEAR: 2025
+
+// conditional entities for RHOAI
+ifdef::cloud-service[]
+:productname-long: {org-name} OpenShift AI
+:productname-short: OpenShift AI
+:url-productname-long: red_hat_openshift_ai
+:url-productname-short: openshift_ai
+:vernum: 1
+:install-package: Add-on
+:openshift-platform: OpenShift
+:dbd-config-default-namespace: redhat-ods-applications
+:operator-default-namespace: redhat-ods-operator
+:workbench-default-namespace: rhods-notebooks
+:authorino-default-namespace: redhat-ods-applications-auth-provider
+:mr-default-namespace: rhoai-model-registries
+:monitoring-default-namespace: redhat-ods-monitoring
+endif::[]
+
+// conditional entities for RHOAI-SM
+ifdef::self-managed[]
+:productname-long: {org-name} OpenShift AI Self-Managed
+:productname-short: OpenShift AI Self-Managed
+:url-productname-long: red_hat_openshift_ai_self-managed
+:url-productname-short: openshift_ai_self-managed
+// change this to match the stage-<ver> branch, e.g. 1-latest, 1.n, to get the correct title for release notes
+:vernum: latest
+:install-package: Operator
+:openshift-platform: OpenShift Container Platform
+:openshift-platform-url: openshift-container-platform
+:dbd-config-default-namespace: redhat-ods-applications
+:operator-default-namespace: redhat-ods-operator
+:workbench-default-namespace: rhods-notebooks
+:authorino-default-namespace: redhat-ods-applications-auth-provider
+:mr-default-namespace: rhoai-model-registries
+:monitoring-default-namespace: redhat-ods-monitoring
+endif::[]
+
+ifdef::upstream[]
+:productname-long: Open Data Hub
+:productname-short: Open Data Hub
+:user-group: pass:q,a[`odh-users`]
+:admin-group: pass:q,a[`odh-admins`]
+:url-productname-long: open_data_hub
+:url-productname-short: open_data_hub
+// change this to match the stage-<ver> branch, see https://github.com/opendatahub-io/opendatahub-operator/releases
+:vernum: 2.34
+:install-package: Operator
+:openshift-platform: OpenShift Container Platform
+:openshift-platform-url: openshift-container-platform
+:odhdocshome: https://opendatahub.io/docs
+:dbd-config-default-namespace: opendatahub
+:operator-default-namespace: openshift-operators
+:workbench-default-namespace: opendatahub
+:authorino-default-namespace: opendatahub-auth-provider
+:mr-default-namespace: odh-model-registries
+:monitoring-default-namespace: opendatahub
+endif::[]
+
+ifndef::upstream[]
+:user-group: pass:q,a[`rhods-users`]
+:admin-group: pass:q,a[`rhods-admins`]
+endif::[]
+
+// conditional entities for release note titles using numbers or not
+// If version number is 1-latest or 1, use Release notes. If version number is 1.x it is theoretically greater than 1, so use 1.n release notes.
+ifeval::[{vernum} == latest]
+:release-notes-title: Release notes
+:url-release-notes: release_notes
+endif::[]
+ifeval::[{vernum} == 2]
+:release-notes-title: Release notes
+:url-release-notes: release_notes
+endif::[]
+ifeval::[{vernum} > 2]
+:release-notes-title: {vernum} release notes
+:url-release-notes: {vernum}_release_notes
+endif::[]
+
+// generic entities
+:org-name: Red{nbsp}Hat
+:rhoaidocshome: https://docs.redhat.com/en/documentation/{url-productname-long}/{vernum}/
+:default-format-url: html
+:ocp-latest-version: 4.19
+:ocp-minimum-version: 4.16
+:osd-latest-version: 4
+:rosa-latest-version: 4
+:rosa-classic-latest-version: 4
+:os-latest-version: 1.36
+:rhelai-productname-long: Red{nbsp}Hat Enterprise Linux AI
+:rhelai-productname-short: RHEL AI
+:rhbok-productname: Red Hat build of Kueue
+:rhbok-docs: https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/ai_workloads/red-hat-build-of-kueue
+:rosa-productname: Red{nbsp}Hat OpenShift Service on AWS
+:rosa-classic-productname: Red{nbsp}Hat OpenShift Service on AWS (classic architecture)
+:openshift-cli: pass:quotes[OpenShift CLI (`oc`)]
+:llmd: Distributed Inference with llm-d

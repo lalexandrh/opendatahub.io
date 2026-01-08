@@ -1,0 +1,249 @@
+:_module-type: PROCEDURE
+
+[id="configuring-quota-management-for-distributed-workloads_{context}"]
+= Configuring quota management for distributed workloads
+
+[role='_abstract']
+Configure quotas for distributed workloads by creating Kueue resources. Quotas ensure that you can share resources between several data science projects.
+
+.Prerequisites
+* You have logged in to {openshift-platform} with the `cluster-admin` role.
+
+* You have installed the {openshift-cli} as described in the appropriate documentation for your cluster:
+ifdef::upstream,self-managed[]
+** link:https://docs.redhat.com/en/documentation/openshift_container_platform/{ocp-latest-version}/html/cli_tools/openshift-cli-oc#installing-openshift-cli[Installing the OpenShift CLI^] for OpenShift Container Platform  
+** link:https://docs.redhat.com/en/documentation/red_hat_openshift_service_on_aws/{rosa-latest-version}/html/cli_tools/openshift-cli-oc#installing-openshift-cli[Installing the OpenShift CLI^] for {rosa-productname}
+endif::[]
+ifdef::cloud-service[]
+** link:https://docs.redhat.com/en/documentation/openshift_dedicated/{osd-latest-version}/html/cli_tools/openshift-cli-oc#installing-openshift-cli[Installing the OpenShift CLI^] for OpenShift Dedicated  
+** link:https://docs.redhat.com/en/documentation/red_hat_openshift_service_on_aws_classic_architecture/{rosa-classic-latest-version}/html/cli_tools/openshift-cli-oc#installing-openshift-cli[Installing the OpenShift CLI^] for {rosa-classic-productname}
+endif::[]
+
+ifdef::upstream[]
+* You have installed and activated the {rhbok-productname} Operator as described in link:{odhdocshome}/managing-odh/#configuring-workload-management-with-kueue_kueue[Configuring workload management with Kueue].
+endif::[]
+ifndef::upstream[]
+* You have installed and activated the {rhbok-productname} Operator as described in link:{rhoaidocshome}{default-format-url}/managing_openshift_ai/managing-workloads-with-kueue#configuring-workload-management-with-kueue_kueue[Configuring workload management with Kueue].
+endif::[]
+
+ifdef::upstream[]
+* You have installed the required distributed workloads components as described in link:{odhdocshome}/installing-open-data-hub/#installing-the-distributed-workloads-components_install[Installing the distributed workloads components].
+endif::[]
+
+ifdef::self-managed[]
+* You have installed the required distributed workloads components as described in link:{rhoaidocshome}{default-format-url}/installing_and_uninstalling_{url-productname-short}/installing-the-distributed-workloads-components_install[Installing the distributed workloads components] (for disconnected environments, see link:{rhoaidocshome}{default-format-url}/installing_and_uninstalling_{url-productname-short}_in_a_disconnected_environment/installing-the-distributed-workloads-components_install[Installing the distributed workloads components]).
+endif::[]
+
+ifdef::cloud-service[]
+* You have installed the required distributed workloads components as described in link:{rhoaidocshome}{default-format-url}/installing_and_uninstalling_{url-productname-short}/installing-the-distributed-workloads-components_install[Installing the distributed workloads components].
+endif::[]
+
+
+ifndef::upstream[]
+* You have created a data science project that contains a workbench, and the workbench is running a default workbench image that contains the CodeFlare SDK, for example, the *Standard Data Science* workbench. For information about how to create a project, see link:{rhoaidocshome}{default-format-url}/working_on_data_science_projects/using-data-science-projects_projects#creating-a-data-science-project_projects[Creating a data science project]. 
+endif::[]
+ifdef::upstream[]
+* You have created a data science project that contains a workbench, and the workbench is running a default workbench image that contains the CodeFlare SDK, for example, the *Standard Data Science* workbench. For information about how to create a project, see link:{odhdocshome}/working-on-data-science-projects/#creating-a-data-science-project_projects[Creating a data science project]. 
+endif::[]
+
+* You have sufficient resources. In addition to the base {productname-short} resources, you need 1.6 vCPU and 2 GiB memory to deploy the distributed workloads infrastructure.
+
+* The resources are physically available in the cluster. For more information about Kueue resources, see the link:{rhbok-docs}[{rhbok-productname} documentation].
+
+
+ifndef::upstream[]
+* If you want to use graphics processing units (GPUs), you have enabled GPU support in {productname-short}.
+If you use NVIDIA GPUs, see link:{rhoaidocshome}{default-format-url}/managing_openshift_ai/enabling-accelerators#enabling-nvidia-gpus_managing-rhoai[Enabling NVIDIA GPUs^]. 
+If you use AMD GPUs, see link:{rhoaidocshome}{default-format-url}/managing_openshift_ai/enabling-accelerators#amd-gpu-integration_managing-rhoai[AMD GPU integration^].
++
+ifdef::self-managed[]
+[NOTE]
+====
+In {productname-short} {vernum}, {org-name} supports only NVIDIA GPU accelerators and AMD GPU accelerators for distributed workloads.
+====
+endif::[]
+ifdef::cloud-service[]
+[NOTE]
+====
+In {productname-short}, {org-name} supports only NVIDIA GPU accelerators and AMD GPU accelerators for distributed workloads.
+====
+endif::[]
+endif::[]
+ifdef::upstream[]
+* If you want to use graphics processing units (GPUs), you have enabled GPU support.
+This process includes installing the Node Feature Discovery Operator and the relevant GPU Operator.
+For more information, see link:https://docs.nvidia.com/datacenter/cloud-native/openshift/latest/index.html[NVIDIA GPU Operator on {org-name} OpenShift Container Platform^] in the NVIDIA documentation for NVIDIA GPUs and link:https://instinct.docs.amd.com/projects/gpu-operator/en/latest/installation/openshift-olm.html[AMD GPU Operator on {org-name} OpenShift Container Platform^] in the AMD documentation for AMD GPUs.
+endif::[]
+
+.Procedure
+
+. In a terminal window, if you are not already logged in to your OpenShift cluster as a cluster administrator, log in to the {openshift-cli} as shown in the following example:
++
+[source,subs="+quotes"]
+----
+$ oc login __<openshift_cluster_url>__ -u __<admin_username>__ -p __<password>__
+----
+
+. Verify that a resource flavor exists or create a custom one, as follows:
+.. Check whether a `ResourceFlavor` already exists:
++
+[source,terminal]
+----
+$ oc get resourceflavors
+----
+
+.. If a `ResourceFlavor` already exists and you need to modify it, edit it in place:
++
+[source,terminal]
+----
+$ oc edit resourceflavor <existing_resourceflavor_name>
+----
+
+.. If a `ResourceFlavor` does not exist or you want a custom one, create a file called `default_flavor.yaml` and populate it with the following content:
++
+.Empty Kueue resource flavor
+[source,yaml]
+----
+apiVersion: kueue.x-k8s.io/v1beta1
+kind: ResourceFlavor
+metadata:
+  name: <example_resource_flavor>
+----
++
+For more examples, see _Example Kueue resource configurations_.
+
+.. Perform one of the following actions:
++
+** If you are modifying the existing resource flavor, save the changes.
+** If you are creating a new resource flavor, apply the configuration to create the `ResourceFlavor` object:
++
+[source,terminal]
+----
+$ oc apply -f default_flavor.yaml
+----
+
+. Verify that a default cluster queue exists or create a custom one, as follows:
++
+[NOTE]
+====
+{productname-short} automatically created a default cluster queue when the Kueue integration was activated. You can verify and modify the default cluster queue, or create a custom one.
+====
+.. Check whether a `ClusterQueue` already exists:
++
+[source,terminal]
+----
+$ oc get clusterqueues
+----
+
+.. If a `ClusterQueue` already exists and you need to modify it (for example, to change the resources), edit it in place:
++
+[source,terminal]
+----
+$ oc edit clusterqueue <existing_clusterqueue_name>
+----
+
+.. If a `ClusterQueue` does not exist or you want a custom one, create a file called `cluster_queue.yaml` and populate it with the following content:
++
+.Example cluster queue
+[source,YAML]
+----
+apiVersion: kueue.x-k8s.io/v1beta1
+kind: ClusterQueue
+metadata:
+  name: <example_cluster_queue>
+spec:
+  namespaceSelector: {}  <1>
+  resourceGroups:
+  - coveredResources: ["cpu", "memory", "nvidia.com/gpu"]  <2>
+    flavors:
+    - name: "<resource_flavor_name>"  <3>
+      resources:  <4>
+      - name: "cpu"
+        nominalQuota: 9
+      - name: "memory"
+        nominalQuota: 36Gi
+      - name: "nvidia.com/gpu" 
+        nominalQuota: 5
+----
++
+<1> Defines which namespaces can use the resources governed by this cluster queue. An empty `namespaceSelector` as shown in the example means that all namespaces can use these resources.
+<2> Defines the resource types governed by the cluster queue. This example `ClusterQueue` object governs CPU, memory, and GPU resources. If you use AMD GPUs, replace `nvidia.com/gpu` with `amd.com/gpu` in the example code.
+<3> Defines the resource flavor that is applied to the resource types listed. In this example, the <resource_flavor_name> resource flavor is applied to CPU, memory, and GPU resources.
+<4> Defines the resource requirements for admitting jobs. The cluster queue will start a distributed workload only if the total required resources are within these quota limits.
+
+.. Replace the example quota values (9 CPUs, 36 GiB memory, and 5 NVIDIA GPUs) with the appropriate values for your cluster queue.
+If you use AMD GPUs, replace `nvidia.com/gpu` with `amd.com/gpu` in the example code. For more examples, see _Example Kueue resource configurations_.
++
+You must specify a quota for each resource that the user can request, even if the requested value is 0, by updating the `spec.resourceGroups` section as follows:
++
+** Include the resource name in the `coveredResources` list.
+** Specify the resource `name` and `nominalQuota` in the `flavors.resources` section, even if the `nominalQuota` value is 0.
+
+.. Perform one of the following actions:
++
+** If you are modifying the existing cluster queue, save the changes.
+** If you are creating a new cluster queue, apply the configuration to create the `ClusterQueue` object:
++
+[source,terminal]
+----
+$ oc apply -f cluster_queue.yaml
+----
+
+. Verify that a local queue that points to your cluster queue exists for your project namespace, or create a custom one, as follows:
++
+[NOTE]
+====
+If Kueue is enabled in the {productname-short} dashboard, new projects created from the dashboard are automatically configured for Kueue management. In those namespaces, a default local queue might already exist. You can verify and modify the local queue, or create a custom one.
+====
+
+.. Check whether a `LocalQueue` already exists for your project namespace:
++
+[source,terminal]
+----
+$ oc get localqueues -n <project_namespace>
+----
+
+.. If a `LocalQueue` already exists and you need to modify it (for example, to point to a different `ClusterQueue`), edit it in place:
++
+[source,terminal]
+----
+$ oc edit localqueue <existing_localqueue_name> -n <project_namespace>
+----
+
+.. If a `LocalQueue` does not exist or you want a custom one, create a file called `local_queue.yaml` and populate it with the following content:
++
+.Example local queue
+[source,YAML]
+----
+apiVersion: kueue.x-k8s.io/v1beta1
+kind: LocalQueue
+metadata:
+  name: <example_local_queue>
+  namespace: <project_namespace>
+spec:
+  clusterQueue: <cluster_queue_name>
+----
+.. Replace the `name`, `namespace`, and `clusterQueue` values accordingly.
+
+.. Perform one of the following actions:
++
+** If you are modifying an existing local queue, save the changes.
+** If you are creating a new local queue, apply the configuration to create the `LocalQueue` object:
++
+[source,terminal]
+----
+$ oc apply -f local_queue.yaml
+----
+
+.Verification
+Check the status of the local queue in a project, as follows:
+
+[source,terminal]
+----
+$ oc get localqueues -n <project_namespace>
+----
+
+[role='_additional-resources']
+.Additional resources
+* link:{rhbok-docs}[{rhbok-productname} documentation]
+* link:https://kueue.sigs.k8s.io/docs/concepts/[Kueue documentation]

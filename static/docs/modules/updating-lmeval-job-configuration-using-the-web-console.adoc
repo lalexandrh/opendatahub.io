@@ -1,0 +1,74 @@
+:_module-type: PROCEDURE
+
+ifdef::context[:parent-context: {context}]
+[id="updating-lmeval-job-configuration-using-the-web-console_{context}"]
+= Updating LMEval job configuration using the web console
+
+[role='_abstract']
+Follow these steps to enable online access (`allowOnline`) and remote code execution (`allowCodeExecution`) modes through the {productname-short} web console for LMEval jobs. 
+
+[IMPORTANT]
+====
+Enabling online access or code execution involves a security risk. Only use these configurations if you trust the source(s).
+====
+
+.Prerequisites
+
+* You have cluster administrator privileges for your {productname-long} cluster.
+
+.Procedure
+. In the {openshift-platform} console, click *Operators* -> *Installed Operators*.
+ifdef::self-managed,cloud-service[]
+. Search for the *Red Hat OpenShift AI* Operator, and then click the Operator name to open the Operator details page.
+endif::[]
+ifdef::upstream[]
+. Search for the *Open Data Hub Operator*, and then click the Operator name to open the Operator details page.
+endif::[]
+. Click the *Data Science Cluster* tab.
+. Click the default instance name (for example, *default-dsc*) to open the instance details page.
+. Click the *YAML* tab to show the instance specifications.
+. In the `spec:components:trustyai:eval:lmeval` section, set the `permitCodeExecution` and `permitOnline` fields to a value of `allow`:
++
+----
+spec:
+  components:
+    trustyai:
+      managementState: Managed
+      eval:
+        lmeval:
+           permitOnline: allow
+           permitCodeExecution: allow
+----
+. Click *Save*.
+. From the *Project* drop-down list, select the project that contains the LMEval job you are working with.
+. From the *Resources* drop-down list, select the `LMEvalJob` instance that you are working with.
+. Click *Actions* -> *Edit YAML*
+. Ensure that the `allowOnline` and `allowCodeExecution` are set to `true` to enable online access and code execution for this job when writing your `LMEvalJob` custom resource:
++
+[source,yaml]
+----
+apiVersion: trustyai.opendatahub.io/v1alpha1
+kind: LMEvalJob
+metadata:
+  name: example-lmeval
+spec:
+  allowOnline: true
+  allowCodeExecution: true
+----
+. Click *Save*.
+
+.Configuration keys for LMEvalJob custom resource
+[cols="3,2,5", options="header"]
+|===
+| Field
+| Default
+| Description
+
+| `spec.allowOnline`
+| `false`
+| Enables this job to access the internet (e.g., to download datasets or tokenizers).
+
+| `spec.allowCodeExecution`
+| `false`
+| Allows this job to run code included with downloaded resources.
+|===

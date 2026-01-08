@@ -1,0 +1,28 @@
+:_module-type: PROCEDURE
+
+[id="viewing-active-pipeline-runs_{context}"]
+= Viewing active pipeline runs
+
+[role='_abstract']
+You can view a list of pipeline runs that were previously executed in a pipeline experiment. From this list, you can view details relating to your pipeline runs, such as the pipeline version that the run belongs to, along with the run status, duration, and execution start time.
+
+.Prerequisites
+* You have logged in to {productname-long}.
+* You have previously created a data science project that is available and has a pipeline server.
+* You have imported a pipeline to an active pipeline server.
+* You have previously executed a pipeline run that is available.
+
+.Procedure
+. From the {productname-short} dashboard, click *Experiments* -> *Experiments and runs*.
+. On the *Experiments* page, from the *Project* drop-down list, select the project that contains the pipeline experiment for the active pipeline runs that you want to view.
+. From the list of experiments, click the experiment that contains the active pipeline runs that you want to view.
++
+The *Runs* page opens.
++
+After a run has completed its execution, the run status is displayed in the *Status* column of the *Runs* tab, indicating whether the run succeeded or failed.
+
+.Verification
+* A list of active runs is displayed on the *Runs* tab on the *Runs* page for the pipeline experiment.
+
+//[role='_additional-resources']
+//.Additional resources

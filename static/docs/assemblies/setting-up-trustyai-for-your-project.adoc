@@ -1,0 +1,28 @@
+:_module-type: ASSEMBLY
+
+ifdef::context[:parent-context: {context}]
+
+[id="setting-up-trustyai-for-your-project_{context}"]
+= Setting up TrustyAI for your project
+
+[role='_abstract']
+
+To set up model monitoring with TrustyAI for a data science project, a data scientist does the following tasks:
+
+* Authenticate the TrustyAI service
+* Upload and send training data to TrustyAI for bias or data drift monitoring
+* Label your data fields (optional)
+
+After setting up, a data scientist can create and view bias and data drift metrics for deployed models. 
+
+include::modules/authenticating-trustyai-service.adoc[leveloffset=+1]
+
+include::modules/uploading-training-data-to-trustyai.adoc[leveloffset=+1]
+
+include::modules/sending-training-data-to-trustyai.adoc[leveloffset=+1]
+
+include::modules/labeling-data-fields.adoc[leveloffset=+1]
+
+
+ifdef::parent-context[:context: {parent-context}]
+ifndef::parent-context[:!context:]

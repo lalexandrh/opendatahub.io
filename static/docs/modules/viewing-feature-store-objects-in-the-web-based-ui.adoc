@@ -1,0 +1,76 @@
+:_module-type: PROCEDURE
+
+[id="viewing-feature-store-objects-in-the-web-based-ui_{context}"]
+= Viewing Feature Store objects in the web-based UI
+
+[role='_abstract']
+You can use the Feature Store Web UI to view all registered features, data sources, entities, and feature services.
+
+.Prerequisites
+
+* You can access the OpenShift console.
+* You have installed the {openshift-cli} as described in the appropriate documentation for your cluster:
+ifdef::upstream,self-managed[]
+** link:https://docs.redhat.com/en/documentation/openshift_container_platform/{ocp-latest-version}/html/cli_tools/openshift-cli-oc#installing-openshift-cli[Installing the OpenShift CLI^] for OpenShift Container Platform  
+** link:https://docs.redhat.com/en/documentation/red_hat_openshift_service_on_aws/{rosa-latest-version}/html/cli_tools/openshift-cli-oc#installing-openshift-cli[Installing the OpenShift CLI^] for {rosa-productname}
+endif::[]
+ifdef::cloud-service[]
+** link:https://docs.redhat.com/en/documentation/openshift_dedicated/{osd-latest-version}/html/cli_tools/openshift-cli-oc#installing-openshift-cli[Installing the OpenShift CLI^] for OpenShift Dedicated  
+** link:https://docs.redhat.com/en/documentation/red_hat_openshift_service_on_aws_classic_architecture/{rosa-classic-latest-version}/html/cli_tools/openshift-cli-oc#installing-openshift-cli[Installing the OpenShift CLI^] for {rosa-classic-productname}
+endif::[]
+
+* You have enabled the Feature Store component, as described in _Enabling the Feature Store component_.
+
+* You have created a Feature Store CRD, as described in _Creating a Feature Store instance in a data science project_.
+
+.Procedure
+
+. In the OpenShift console, select *Administration* -> *CustomResourceDefinitions*.
+. To filter the list, in the *Search by Name* field, enter *feature*.
+. Click the *FeatureStore* CRD and then click *Instances*.
+. Click the name of the instance that corresponds to the metadata name you specified when you created the Feature Store instance.
+. Edit the YAML to include a reference to `services.ui` in the `spec` section, as shown in the following example:
++
+----
+spec:
+ feastProject: credit_scoring_local
+ feastProjectDir:
+   git:
+     ref: 598a270
+     url: 'https://github.com/feast-dev/feast-credit-score-local-tutorial'
+ services:
+   ui: {}
+----
+. Click *Save* and then click *Reload*.
++
+The Feature Store Operator starts a container for the web-based Feature Store UI and creates an OpenShift route that provides the URL so that you can access it. 
+
+. In the {openshift-platform} console, select *Workloads* -> *Pods*.
+. Make sure that your project (for example, `my-ds-project`) is selected.
++
+You should see a deployment for the web-based UI. Note that OpenShift enables TLS by default at runtime.
+
+. To populate the web-based UI with the objects in your Feature Store instance:
+.. In the OpenShift console, select *Workloads* -> *Pods*. 
+.. Make sure that your project (for example, `my-ds-project`) is selected. 
+.. Click the `feast` pod and then select *Pod details*. 
+.. Click **Terminal**. 
+.. To update the Feature Store instance, enter the following command:
++
+----
+feast apply
+----
+
+. To find the URL for the Feature Store UI, in the OpenShift console, click *Networking* -> *Routes*. 
++
+In the row for the Feature Store UI, for example `feast-sample-ui`, the URL is in the *Location* column. 
+
+. Click the URL link to open it in your default web browser.
+
+
+.Verification
+
+The Feature Store Web UI is displayed and shows the feature objects in your project as shown in the following figure:
+
+.The Feature Store Web UI
+image::images/feature-store-ui.png[The Feature Store Web UI]
