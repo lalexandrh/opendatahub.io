@@ -17,7 +17,7 @@ These settings do not impact the storage class within {openshift-platform}.
 * You have logged in to {productname-short} as a user with {productname-short} administrator privileges. 
 
 .Procedure
-. From the {productname-short} dashboard, click *Settings* -> *Storage classes*.
+. From the {productname-short} dashboard, click *Settings* -> *Cluster settings* -> *Storage classes*.
 +
 The *Storage classes* page opens, displaying the storage classes for your cluster as defined in {openshift-platform}.
 . To enable or disable a storage class for users, on the row containing the storage class, click the toggle in the *Enable* column.
@@ -39,9 +39,9 @@ NOTE: A warning is displayed if you request an access mode with unknown support,
 . Click *Save*.
 
 .Verification
-* If you enabled a storage class, the storage class is available for selection when a user adds cluster storage to a data science project or workbench.
-* If you disabled a storage class, the storage class is not available for selection when a user adds cluster storage to a data science project or workbench.
-* If you edited a storage class name, the updated storage class name is displayed when a user adds cluster storage to a data science project or workbench.
+* If you enabled a storage class, the storage class is available for selection when a user adds cluster storage to a project or workbench.
+* If you disabled a storage class, the storage class is not available for selection when a user adds cluster storage to a project or workbench.
+* If you edited a storage class name, the updated storage class name is displayed when a user adds cluster storage to a project or workbench.
 
 [role='_additional-resources']
 .Additional resources
