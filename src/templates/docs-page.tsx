@@ -43,8 +43,8 @@ const DocsPageTemplate = ({
       >
         <Alert variant="info" title="Important Notice" isInline className="pf-u-mb-xl">
           <p>
-            Please note that more information about the previous v2 releases can be found <a href="https://github.com/opendatahub-io/opendatahub-operator/releases" target="_blank" rel="noopener noreferrer">here</a>.
-            You can use "Find a release" search bar to search for a particular release.
+            The Open Data Hub documentation and the <code>opendatahub-documentation</code> repository are archived as of March 2026.
+            To see the latest documentation, go to: <a href="https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed/" target="_blank" rel="noopener noreferrer">Red Hat OpenShift AI Self-Managed documentation</a>.
           </p>
         </Alert>
         <Title headingLevel="h1" size="4xl">{asciidoc?.document?.title ?? markdownRemark?.frontmatter?.title}</Title>
