@@ -25,7 +25,7 @@ If you are deploying a model using a hardware profile that relies on Spyre sched
 
 .Prerequisites
 
-* You have read the link:https://www.ibm.com/docs/en/rhocp-ibm-z?topic=spyre-operator-z-linuxone[Spyre Operator for IBM Z] documentation.
+* You have read the link:https://www.ibm.com/docs/en/rhocp-ibm-z?topic=spyre-operator-z-linuxone-users-guide[Spyre Operator for IBM Z] documentation.
 * You have deployed a model on {openshift-platform} by using vLLM ServingRuntime:
 ** For X86 deployments, you have used the **vLLM Spyre AI Accelerator ServingRuntime for KServe** runtime.
 ** For IBM Z (s390x) deployments, you have used the **vLLM Spyre s390x ServingRuntime for KServe** runtime.
@@ -49,7 +49,14 @@ If you are deploying to IBM Z (s390x) note the following platform-specific requi
 * IBM Z only supports continuous batching for this runtime. Ensure that you add the following runtime arguments in the `args` section: 
 ** `--max_model_len`
 ** `--max-num-seqs=4`
-** `--tensor-parallel-size`.
+** `--tensor-parallel-size`
+** `--enable-prefix-caching`.
+* To use prebuilt model caches for {productname-short} Inference Server 3.4 EA1 images, ensure that you add the following runtime arguments in the `args` section:
+** `--max_model_len=32768`
+** `--max-num-seqs=32`
+** `--tensor-parallel-size=4`
+** `--enable-prefix-caching`
+* For IBM Z (s390x), set the `VLLM_DT_CHUNK_LEN` environment variable to `512`.
 * The toleration key differs for the following platforms:
 ** For x86 nodes, use the toleration key `ibm.com/spyre_pf`.
 ** For IBM Z (s390x), only Virtual Function (VF) mode is supported for IBM Spyre devices. Therefore, use the VF toleration key for IBM Z: `ibm.com/spyre_vf`.
@@ -87,6 +94,10 @@ spec:
       - "--max_model_len=2048"
       - "--max-num-seqs=4"
       - "--tensor-parallel-size=1"
+      - "--enable-prefix-caching"
+      env:
+      - name: VLLM_DT_CHUNK_LEN
+        value: "512"
       # other container args and image config as required
     schedulerName: spyre-scheduler
     tolerations:

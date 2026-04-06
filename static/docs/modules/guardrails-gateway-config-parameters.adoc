@@ -6,7 +6,6 @@
 
 The Guardrails gateway provides a mechanism for defining preset detector pipelines and creating a unique, endpoint-per-pipeline preset. To use the Guardrails gateway, create a Guardrails Gateway configuration with a Config Map.
 
-+
 .Example `gateway_configmap.yaml`
 [source,yaml]
 ----
@@ -54,6 +53,10 @@ data:
 * `detectors` - The list of detectors that should be used in this particular pipeline preset. Please see the note below regarding using multiple detectors from the same underlying server.
 |===
 
+[NOTE]
+====
+The Guardrails Gateway only provides the `/v1/chat/completions` API for each route preset. The older `/v1/completions` API is not supported.
+====
 
 [NOTE]
 ====

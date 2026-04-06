@@ -22,10 +22,12 @@ endif::[]
 * You are familiar with how to create a `configMap` for monitoring a user-defined workflow. You perform similar steps in this procedure. See link:https://docs.redhat.com/en/documentation/openshift_container_platform/{ocp-latest-version}/html/nodes/working-with-pods#nodes-pods-configmap-overview_configmaps[Understanding config maps].
 ifdef::upstream[]
 * You have configured KServe to use `RawDeployment` mode. For more information, see link:{odhdocshome}/deploying_models/#deploying-models-on-the-single-model-serving-platform_odh-user[Deploying models on the single-model serving platform^].
+* You have configured the `spec.kserve.rawDeploymentServiceConfig` field to `Headed` in your `DataScienceCluster`.
 endif::[]
 
 ifndef::upstream[]
 * You have configured KServe to use `RawDeployment` mode. For more information, see link:{rhoaidocshome}{default-format-url}/deploying_models/deploying_models_on_the_single_model_serving_platform#deploying-models-on-the-single-model-serving-platform_rhoai-user[Deploying models on the single-model serving platform^].
+* You have configured the `spec.kserve.rawDeploymentServiceConfig` field to `Headed` in your `DataScienceCluster`.
 endif::[]
 
 * You have the TrustyAI component in your {productname-short} `DataScienceCluster` set to `Managed`.
@@ -55,6 +57,8 @@ apiVersion: trustyai.opendatahub.io/v1alpha1
 kind: GuardrailsOrchestrator
 metadata:
   name: guardrails-orchestrator-sample
+  annotations:
+    security.opendatahub.io/enable-auth: "true"
 spec:
   orchestratorConfig: <orchestrator_configmap>
   guardrailsGatewayConfig: <guardrails_gateway_configmap>
@@ -70,11 +74,24 @@ spec:
     - <tls_secret_2_to_mount>
   otelExporter:
     - <open_telemetry_config>
+  env:
+    - name: MODEL_TOKEN
+      valueFrom:
+        secretKeyRef:
+          name: api-token-secret
+          key: token
   replicas: 1
 ----
 +
 If desired, the TrustyAI controller can automatically generate an `orchestratorConfig` and `guardrailsGatewayConfig` based on the available resources in your namespace.
 To access this, include the `autoConfig` parameter inside your Custom Resource, and see _Auto Configuring Guardrails_ for documentation on its usage.
++
+.Annotations from example `orchestrator_cr.yaml` CR
+[cols="1,2a", options="header"]
+|===
+| Annotation | Description
+| `security.opendatahub.io/enable-auth` *(optional)* | Boolean value to control whether the Guardrails Orchestrator routes will be authenticated by using the kube-rbac-proxy. If set to `true`, the created routes to the Guardrails Orchestrator, Guardrails Gateway, and built-in detectors will all require authentication headers in the form `Authentication: Bearer $xyz` for access.
+|===
 +
 .Parameters from example `orchestrator_cr.yaml` CR
 [cols="1,2a", options="header"]
@@ -93,6 +110,7 @@ See _Auto Configuring Guardrails_ for more information.
 
 |`enableBuiltInDetectors` *(optional)*| A boolean value to inject the built-in detector sidecar container into the Orchestrator pod. The built-in detector is a lightweight HTTP server containing a number of available guardrailing algorithms.
 |`enableGuardrailsGateway` *(optional)*| A boolean value to enable controlled interaction with the Orchestrator service by enforcing stricter access to its exposed endpoints. It provides a mechanism of configuring detector pipelines, and then provides a unique `/v1/chat/completions` endpoint per configured detector pipeline.
+|`disableOrchestrator` *(optional)*| A boolean value to control whether the Guardrails Orchestrator is included in the deployment. This is intended for standalone built-in detector use cases, such as when you wish to interface with the built-in detectors but do not need orchestration capabilities, for example, when using llama-stack. If `disableOrchestrator` is set to `true`, then `enableBuiltInDetectors` must be also set to `true`.
 |`otelExporter` *(optional)*| A list of paired name and value arguments for configuring OpenTelemetry traces or metrics, or both:
 
 * `otlpProtocol` - Sets the protocol for all the OpenTelemetry protocol (OTLP) endpoints. Valid values are `grpc` (default) or `http`
@@ -104,6 +122,7 @@ See _Auto Configuring Guardrails_ for more information.
 | `logLevel` *(optional)* | The log level to be used in the Guardrails Orchestrator- available values are `Error`, `Warn`, `Info` (default), `Debug`, and `Trace`.
 [[tlsSecrets-param]]
 | `tlsSecrets` *(optional)* | A list of names of `Secret` objects to mount to the Guardrails Orchestrator container. All secrets provided here are mounted into the directory `/etc/tls/$SECRET_NAME` for use in your Orchestrator config TLS configuration. Each secret should contain a `tls.crt` and a `tls.key` field.
+| `env` *(optional)* | A list of environment variables to set in the Guardrails Orchestrator deployment containers. These environment variables are created for every non-kube-rbac-proxy container, including the orchestrator, gateway, and built-in-detectors containers. You can use environment variables to pass API tokens and other configuration values. For more information on defining environment variables, see link:https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/[Define Environment Variables for a Container].
 |`replicas`| The number of Orchestrator pods to create.
 |===
 

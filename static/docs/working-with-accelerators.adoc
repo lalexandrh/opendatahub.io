@@ -16,7 +16,7 @@ include::_artifacts/document-attributes-global.adoc[]
 
 = Working with accelerators
 
-Use accelerators, such as NVIDIA GPUs, AMD GPUs, and Intel Gaudi AI accelerators, to optimize the performance of your end-to-end data science workflows. 
+Use accelerators or accelerated hardware, such as NVIDIA GPUs, AMD GPUs, and Intel Gaudi AI accelerators, to optimize the performance of your end-to-end data science workflows. 
 
 //Overview of accelerators
 include::modules/overview-of-accelerators.adoc[leveloffset=+1]
@@ -42,6 +42,8 @@ include::modules/enabling-amd-gpus.adoc[leveloffset=+2]
 //IBM Spyre accelerators 
 
 include::modules/ibm-spyre-integration.adoc[leveloffset=+1]
+
+include::modules/enabling-ibm-spyre.adoc[leveloffset=+2]
 
 //Using hardware profiles
 include::modules/working-with-hardware-profiles.adoc[leveloffset=+1]

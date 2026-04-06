@@ -10,7 +10,7 @@ To enable IBM Spyre in {productname-short}, you must perform the following tasks
 
 * Install all necessary dependencies before you enable IBM Spyre accelerators in {productname-short}.
 
-* Install the latest version of the IBM Spyre Operator from OperatorHub.  
+* Install the latest version of the IBM Spyre Operator from the software catalog.  
 
 * After you install the IBM Spyre Operator, you must create an accelerator profile or hardware profile in {productname-short} to expose IBM Spyre as an available accelerator resource for workloads.
 
@@ -19,4 +19,5 @@ For more detailed guidance on configuring IBM Spyre accelerators for production-
 [role="_additional-resources"]
 .Additional resources
 
-* link:https://catalog.redhat.com/en/software/containers/ibm-aiu/spyre-operator/688a1121575e62c686a471d4?architecture=amd64[IBM Spyre Operator catalog entry].
+* link:https://catalog.redhat.com/en/software/containers/ibm-aiu/spyre-operator/688a1121575e62c686a471d4?architecture=amd64[IBM Spyre Operator catalog entry]
+* link:https://github.com/ibm/spyre-operator-power-docs[IBM Spyre Operator for IBM Power User's Guide]
